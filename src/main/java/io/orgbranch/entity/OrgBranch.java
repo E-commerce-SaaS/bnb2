@@ -9,13 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class OrgBranch extends BaseJpaEntity {
+public class  OrgBranch extends BaseJpaEntity {
     @Column(unique = true, length = 100)
     private String name;
-    private String orgBranchCode;
 
-    private String mpesaPaybillNumber;
-
-    @Column(unique = true, length = 100)
-    private String businessCentralDimensionCode;
+    private String location;
+    private String description;
 }
