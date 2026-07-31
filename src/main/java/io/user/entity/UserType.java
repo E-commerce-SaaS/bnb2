@@ -1,6 +1,5 @@
 package io.user.entity;
 
 public enum UserType {
-    INTERNAL_USER,
-    DRIVER_USER
+    INTERNAL_USER
 }
