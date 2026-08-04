@@ -10,10 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FetchRoomForm extends BaseFetchForm {
-    private String query;
     private RoomCategory roomCategory;
     private ReservationStatus reservationStatus;
     private String branchEntityId;
-    private Integer pageNum;
-    private Integer pageSize;
 }

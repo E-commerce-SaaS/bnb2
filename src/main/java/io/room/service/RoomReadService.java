@@ -8,16 +8,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
 public class RoomReadService extends BaseJpaRepoReadService<
         Room, RoomRepository> {
 
     public Page<Room> listRooms(FetchRoomForm form) {
 
-        var pageable = repository.defaultPageable(form);
+        var spec = repository.notDeleted();
 
-        return repository.findAll(pageable);
+        if(form.getRoomCategory() != null) {
+            spec = spec.and(repository.roomCategoryIs(form.getRoomCategory()));
+        }
+
+        return repository.findAll(
+            spec,
+            repository.defaultPageable(form)
+        );
     }
 
 }
