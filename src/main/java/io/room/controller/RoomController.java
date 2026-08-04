@@ -2,6 +2,7 @@ package io.room.controller;
 
 import io.lib.service.Message;
 import io.lib.view.EntityApiResponse;
+import io.room.form.RoomEditForm;
 import io.room.form.RoomRegistrationForm;
 import io.room.service.RoomEditService;
 import io.room.view.RoomView;
@@ -9,7 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +40,24 @@ public class RoomController {
             new RoomView(room)
         );
     }
+
+
+    @PreAuthorize("hasAuthority('UPDATE_ROOM')")
+    @PutMapping(INTERNAL_USER_BASE_URL + "/room_update/{roomId}")
+    public EntityApiResponse<RoomView> updateRoom(
+        @PathVariable String roomId,
+        @RequestBody @Valid RoomEditForm form,
+        Authentication auth,
+        Locale locale) {
+
+        form.setSessionUserId(auth.getName());
+        var room = roomEditService.updateRoom(roomId, form);
+
+         return new EntityApiResponse<>(
+            Message.get("room.update.success", locale),
+            new RoomView(room)
+    );
+}
 
     @Autowired
     public void setRoomEditService(RoomEditService service) {
