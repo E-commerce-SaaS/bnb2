@@ -27,7 +27,6 @@ public class RoomController {
     private RoomEditService roomEditService;
     private RoomReadService roomReadService;
 
-
     @PreAuthorize("hasAuthority('REGISTER_ROOM')")
     @PostMapping("register")
     public EntityApiResponse<RoomView> registerRoom(
