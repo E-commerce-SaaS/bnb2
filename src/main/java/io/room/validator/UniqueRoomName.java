@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface UniqueRoomName {
-    String message() default "Name already exists.";
+    String message() default "error.duplicate.name";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

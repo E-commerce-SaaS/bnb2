@@ -19,7 +19,7 @@ import java.util.Locale;
 import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 
 @RestController
-@RequestMapping(INTERNAL_USER_BASE_URL +   "/rooms")
+@RequestMapping(INTERNAL_USER_BASE_URL + "/rooms")
 public class RoomController {
     private RoomEditService roomEditService;
 
@@ -31,14 +31,15 @@ public class RoomController {
             Locale locale) {
         form.setSessionUserId(auth.getName());
         var room = roomEditService.registerRoom(form);
+
         return new EntityApiResponse<>(
-                Message.get("room.registration.success", locale),
-                new RoomView(room)
+            Message.get("room.registration.success", locale),
+            new RoomView(room)
         );
     }
 
     @Autowired
-    public void setRoomEditService(RoomEditService roomEditService) {
-        this.roomEditService = roomEditService;
+    public void setRoomEditService(RoomEditService service) {
+        this.roomEditService = service;
     }
 }

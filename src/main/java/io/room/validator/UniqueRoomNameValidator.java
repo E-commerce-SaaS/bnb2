@@ -7,7 +7,6 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +15,7 @@ public class UniqueRoomNameValidator extends BaseJpaRepoReadService<Room, RoomRe
     public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
         String sanitizedName = WordUtils.capitalize(StringUtils.trimToEmpty(name));
 
-        Specification<Room> spec = repository.notDeleted()
+        var spec = repository.notDeleted()
                 .and(repository.nameIs(sanitizedName));
 
         return !repository.exists(spec);
