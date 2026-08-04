@@ -1,4 +1,4 @@
-package io.units.entity;
+package io.room.entity;
 
 
 public enum ReservationStatus {

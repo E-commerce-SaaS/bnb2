@@ -1,6 +1,6 @@
-package io.units.entity;
+package io.room.entity;
 
-public enum UnitCategory {
+public enum RoomCategory {
     SINGLE,
     DOUBLE,
     SUITE

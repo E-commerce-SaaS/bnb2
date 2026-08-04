@@ -1,4 +1,4 @@
-package io.units.entity;
+package io.room.entity;
 
 import java.math.BigDecimal;
 
@@ -8,7 +8,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,16 +15,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class  UnitsEntity extends BaseJpaEntity {
+public class Room extends BaseJpaEntity {
     @Column(unique = true, length = 100)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private UnitCategory category;
+    private RoomCategory roomCategory;
 
     @ManyToOne
-    @JoinColumn(name = "branch_id")
-    private OrgBranch branch;
+    private OrgBranch orgBranch;
 
     private String floor;
 
