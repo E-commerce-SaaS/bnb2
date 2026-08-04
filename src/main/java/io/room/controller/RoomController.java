@@ -43,16 +43,15 @@ public class RoomController {
 
 
     @PreAuthorize("hasAuthority('UPDATE_ROOM')")
-    @PutMapping(INTERNAL_USER_BASE_URL + "/room_update")
+    @PutMapping(INTERNAL_USER_BASE_URL + "/room_update/{roomId}")
     public EntityApiResponse<RoomView> updateRoom(
-
-        @PathVariable String entityId,
+        @PathVariable String roomId,
         @RequestBody @Valid RoomEditForm form,
         Authentication auth,
         Locale locale) {
 
         form.setSessionUserId(auth.getName());
-        var room = roomEditService.updateRoom(form, entityId);
+        var room = roomEditService.updateRoom(roomId, form);
 
          return new EntityApiResponse<>(
             Message.get("room.update.success", locale),

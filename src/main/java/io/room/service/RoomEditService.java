@@ -36,8 +36,8 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
 
         return room;
     }
-    public Room updateRoom(RoomEditForm roomEditForm ,String entityId ){
-        Room room = roomRepository.findByEntityId(entityId)
+    public Room updateRoom(String roomId, RoomEditForm roomEditForm){
+        Room room = roomRepository.findByEntityId(roomId)
             .orElseThrow(() -> new RuntimeException("Room not found"));
         
         room.setName(roomEditForm.getName());
