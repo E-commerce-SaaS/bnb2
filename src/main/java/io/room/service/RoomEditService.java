@@ -39,7 +39,7 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
     }
 
     public Room updateRoom(String roomId, RoomEditForm editForm){
-        checkNameExists(editForm.getName(), roomId);
+        checkNameExists(roomId, editForm.getName());
 
         var room = findByEntityId(roomId);
         room.setName(editForm.getName());
