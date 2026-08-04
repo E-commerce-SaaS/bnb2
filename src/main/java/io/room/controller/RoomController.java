@@ -2,7 +2,6 @@ package io.room.controller;
 
 import io.lib.service.Message;
 import io.lib.view.EntityApiResponse;
-import io.orgbranch.service.OrgBranchEditService;
 import io.room.form.RoomRegistrationForm;
 import io.room.service.RoomEditService;
 import io.room.view.RoomView;
