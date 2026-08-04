@@ -1,31 +1,53 @@
 package io.room.controller;
 
-
+import io.lib.service.Message;
+import io.lib.view.EntityApiResponse;
 import io.lib.view.PagedEntityApiResponse;
 import io.room.entity.ReservationStatus;
 import io.room.entity.RoomCategory;
 import io.room.form.FetchRoomForm;
+import io.room.form.RoomRegistrationForm;
+import io.room.service.RoomEditService;
 import io.room.service.RoomReadService;
 import io.room.view.RoomView;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Locale;
 
 import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 
 @RestController
 @RequestMapping(INTERNAL_USER_BASE_URL + "/rooms")
 public class RoomController {
+    private RoomEditService roomEditService;
     private RoomReadService roomReadService;
+
+
+    @PreAuthorize("hasAuthority('REGISTER_ROOM')")
+    @PostMapping("register")
+    public EntityApiResponse<RoomView> registerRoom(
+            @RequestBody @Valid RoomRegistrationForm form,
+            Authentication auth,
+            Locale locale) {
+        form.setSessionUserId(auth.getName());
+        var room = roomEditService.registerRoom(form);
+
+        return new EntityApiResponse<>(
+            Message.get("room.registration.success", locale),
+            new RoomView(room)
+        );
+    }
 
     @PreAuthorize("hasAuthority('VIEW_ROOM')")
     @GetMapping("list")
     public PagedEntityApiResponse<RoomView> list(
             @RequestParam(name="query", required = false)String query,
-            @RequestParam(name="status", required = false)ReservationStatus reservationStatus,
+            @RequestParam(name="status", required = false) ReservationStatus reservationStatus,
             @RequestParam(name="roomCategory", required = false) RoomCategory roomCategory,
             @RequestParam(name="branchEntityId", required = false)String branchEntityId,
             @RequestParam(name="pageNum", required = false, defaultValue = "0") Integer pageNum,
@@ -43,6 +65,11 @@ public class RoomController {
         var page = roomReadService.listRooms(form);
         var views = page.getContent().stream().map(RoomView::new).toList();
         return new PagedEntityApiResponse<>(page, views);
+    }
+
+    @Autowired
+    public void setRoomEditService(RoomEditService service) {
+        this.roomEditService = service;
     }
 
     @Autowired
