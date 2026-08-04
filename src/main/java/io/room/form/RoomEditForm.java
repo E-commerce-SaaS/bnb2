@@ -16,7 +16,6 @@ public class RoomEditForm extends SessionUserIdForm {
     @NotBlank(message = "error.invalid.name")
     private String name;
     private BigDecimal pricePerNight;
-    private ReservationStatus reservationStatus;
 
     public String getName() {
         return WordUtils.capitalize(StringUtils.trimToEmpty(name)).trim();

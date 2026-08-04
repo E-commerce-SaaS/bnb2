@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository> {
     private OrgBranchReadService orgBranchReadService;
-    private RoomRepository roomRepository;
 
     public Room registerRoom(RoomRegistrationForm form){
         var orgBranch = orgBranchReadService.findByEntityId(form.getOrgBranchEntityId());
@@ -36,19 +35,17 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
 
         return room;
     }
-    public Room updateRoom(String roomId, RoomEditForm roomEditForm){
-        Room room = roomRepository.findByEntityId(roomId)
-            .orElseThrow(() -> new RuntimeException("Room not found"));
-        
-        room.setName(roomEditForm.getName());
-        room.setPricePerNight(roomEditForm.getPricePerNight());
-        room.setReservationStatus(roomEditForm.getReservationStatus());
+    public Room updateRoom(String roomId, RoomEditForm editForm){
+        var room = findByEntityId(roomId);
+        room.setName(editForm.getName());
+        room.setPricePerNight(editForm.getPricePerNight());
 
-        room = save(room ,roomEditForm.getSessionUserId());
+        room = save(room ,editForm.getSessionUserId());
+
         var activityLogForm = new CreateActivityLogForm();
         activityLogForm.setOwningEntityId(room.getEntityId());
         activityLogForm.setAction("Room update");
-        activityLogForm.setSessionUserId(roomEditForm.getSessionUserId());
+        activityLogForm.setSessionUserId(editForm.getSessionUserId());
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
 
         return room;
@@ -59,10 +56,4 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
     public void setOrgBranchReadService(OrgBranchReadService service) {
         this.orgBranchReadService = service;
     }
-
-    @Autowired
-    public void setRoomRepository(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
-    }
-
 }
