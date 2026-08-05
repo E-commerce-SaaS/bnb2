@@ -20,6 +20,8 @@ public class Room extends BaseJpaEntity {
     @ManyToOne
     private OrgBranch orgBranch;
 
+    private String orgBranchEntityId;
+
     @Column(unique = true, length = 100)
     private String name;
 
@@ -33,4 +35,11 @@ public class Room extends BaseJpaEntity {
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus = ReservationStatus.AVAILABLE;
+
+    public void setOrgBranch(OrgBranch orgBranch) {
+        this.orgBranch = orgBranch;
+        if(this.orgBranch != null){
+            this.orgBranchEntityId = this.orgBranch.getEntityId();
+        }
+    }
 }
