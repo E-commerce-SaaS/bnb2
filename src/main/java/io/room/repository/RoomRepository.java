@@ -22,7 +22,7 @@ public interface RoomRepository extends BaseJpaRepository<Room>{
         return ( root, cb, cq) -> cq.equal(root.get("reservationStatus"), reservationStatus);
     }
 
-    default Specification<Room> branchEntityIdIs(Long branchEntityId){
-        return ( root, cb, cq) -> cq.equal(root.get("branchEntity"), branchEntityId);
+    default Specification<Room> branchEntityIdIs(String branchEntityId){
+        return ( root, cb, cq) -> cq.equal(root.get("orgBranchEntityId"), branchEntityId);
     }
 }

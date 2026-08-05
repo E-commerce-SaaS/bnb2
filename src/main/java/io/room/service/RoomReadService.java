@@ -26,7 +26,7 @@ public class RoomReadService extends BaseJpaRepoReadService<
         }
 
         if (StringUtils.isNotBlank(form.getBranchEntityId())) {
-            spec = spec.and(repository.branchEntityIdIs(Long.valueOf(form.getBranchEntityId())));
+            spec = spec.and(repository.branchEntityIdIs(form.getBranchEntityId()));
         }
 
         return repository.findAll(
