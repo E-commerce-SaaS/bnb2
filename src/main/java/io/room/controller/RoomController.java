@@ -49,23 +49,22 @@ public class RoomController {
         );
     }
 
-
     @PreAuthorize("hasAuthority('UPDATE_ROOM')")
-    @PutMapping(INTERNAL_USER_BASE_URL + "/room_update/{roomId}")
+    @PutMapping("/update/{roomId}")
     public EntityApiResponse<RoomView> updateRoom(
-        @PathVariable String roomId,
-        @RequestBody @Valid RoomEditForm form,
-        Authentication auth,
-        Locale locale) {
+            @PathVariable String roomId,
+            @RequestBody @Valid RoomEditForm form,
+            Authentication auth,
+            Locale locale) {
 
         form.setSessionUserId(auth.getName());
         var room = roomEditService.updateRoom(roomId, form);
 
-         return new EntityApiResponse<>(
-            Message.get("room.update.success", locale),
-            new RoomView(room)
-    );
-}
+        return new EntityApiResponse<>(
+                Message.get("room.update.success", locale),
+                new RoomView(room)
+        );
+    }
 
     @PreAuthorize("hasAuthority('VIEW_ROOM')")
     @GetMapping("list")
@@ -75,7 +74,8 @@ public class RoomController {
             @RequestParam(name="roomCategory", required = false) RoomCategory roomCategory,
             @RequestParam(name="branchEntityId", required = false)String branchEntityId,
             @RequestParam(name="pageNum", required = false, defaultValue = "0") Integer pageNum,
-            @RequestParam(name="pageSize", required = false, defaultValue = "100") Integer pageSize
+            @RequestParam(name="pageSize", required = false, defaultValue = "100") Integer pageSize,
+            Authentication auth
 
     ){
         var form = new FetchRoomForm();
@@ -85,6 +85,7 @@ public class RoomController {
         form.setBranchEntityId(branchEntityId);
         form.setPageNum(pageNum);
         form.setPageSize(pageSize);
+        form.setSessionUserId(auth.getName());
 
         var page = roomReadService.listRooms(form);
         var views = page.getContent().stream().map(RoomView::new).toList();
