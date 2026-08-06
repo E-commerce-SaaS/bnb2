@@ -1,8 +1,11 @@
 package io.room.view;
 
 import io.lib.view.BaseView;
+import io.room.entity.ReservationStatus;
 import io.room.entity.Room;
 import io.room.entity.RoomCategory;
+
+import java.math.BigDecimal;
 
 public class RoomView extends BaseView<Room> {
     public RoomView(Room entity) {
@@ -15,5 +18,13 @@ public class RoomView extends BaseView<Room> {
 
     public RoomCategory getRoomCategory(){
         return entity.getRoomCategory();
+    }
+
+    public BigDecimal getPricePerNight(){
+        return entity.getPricePerNight();
+    }
+
+    public ReservationStatus  getReservationStatus(){
+        return entity.getReservationStatus();
     }
 }

@@ -43,6 +43,8 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
 
         var room = findByEntityId(roomId);
         room.setName(editForm.getName());
+        room.setFloor(editForm.getFloor());
+        room.setRoomCategory(editForm.getRoomCategory());
         room.setPricePerNight(editForm.getPricePerNight());
 
         room = save(room ,editForm.getSessionUserId());
