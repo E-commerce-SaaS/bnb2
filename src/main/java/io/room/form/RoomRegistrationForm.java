@@ -17,7 +17,4 @@ public class RoomRegistrationForm extends RoomEditForm{
     @NotBlank(message = "error.invalid.org.branch")
     private String orgBranchEntityId;
 
-    private String floor;
-
-    private RoomCategory roomCategory;
 }
