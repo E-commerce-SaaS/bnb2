@@ -1,6 +1,5 @@
 package io.room.form;
 
-import io.room.entity.RoomCategory;
 import io.room.validator.UniqueRoomName;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

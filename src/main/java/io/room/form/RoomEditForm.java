@@ -1,7 +1,6 @@
 package io.room.form;
 
 import io.lib.form.SessionUserIdForm;
-import io.room.entity.ReservationStatus;
 import io.room.entity.RoomCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,7 +24,6 @@ public class RoomEditForm extends SessionUserIdForm {
 
     private BigDecimal pricePerNight;
 
-
     public String getName() {
         return WordUtils.capitalize(StringUtils.trimToEmpty(name)).trim();
     }
@@ -33,5 +31,4 @@ public class RoomEditForm extends SessionUserIdForm {
     public String getFloor() {
         return WordUtils.capitalize(StringUtils.trimToEmpty(floor)).trim();
     }
-
 }

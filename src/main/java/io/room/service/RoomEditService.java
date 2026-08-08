@@ -60,9 +60,11 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
 
     private void checkNameExists(String roomId, String name){
         var spec = repository.notDeleted()
-                .and(repository.nameIs(name))
-                .and(repository.entityIdNot(roomId));
+            .and(repository.nameIs(name))
+            .and(repository.entityIdNot(roomId));
+
         boolean exists = repository.exists(spec);
+
         if(exists){
             throw new CommonRuntimeException(ExceptionType.BAD_REQUEST, "error.duplicate.name");
         }
