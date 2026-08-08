@@ -24,6 +24,10 @@ public class RoomView extends BaseView<Room> {
         return entity.getPricePerNight();
     }
 
+    public String getFloor(){
+        return entity.getFloor();
+    }
+
     public ReservationStatus  getReservationStatus(){
         return entity.getReservationStatus();
     }
