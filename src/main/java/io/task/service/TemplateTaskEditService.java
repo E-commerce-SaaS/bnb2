@@ -13,14 +13,15 @@ import io.task.entity.TemplateTask;
 import io.task.repository.TemplateTaskRepository;
 import java.util.ArrayList;
 
+
 @Service
 public class TemplateTaskEditService extends BaseJpaRepoEditService<TemplateTask, TemplateTaskRepository>{
 
     private TaskReadService taskReadService;
  
     void registerTemplateTask(Template template ,List<String> taskIds,String createdById){
-        List <Task> tasks= taskReadService.findByIds(taskIds);
-        List<TemplateTask> templatetasks = new ArrayList<>();
+        List<Task> tasks= taskReadService.findByIds(taskIds);
+        List<TemplateTask> templateTasks = new ArrayList<>();
 
         for(Task task : tasks){
             TemplateTask templateTask = new TemplateTask();
@@ -28,11 +29,10 @@ public class TemplateTaskEditService extends BaseJpaRepoEditService<TemplateTask
             templateTask.setTemplate(template);
             templateTask.setTask(task);
             templateTask.setCreatedByEntityId(createdById);
-            templatetasks.add(templateTask);
-            template.getTemplateTasks().add(templateTask);
+
+            templateTasks.add(templateTask);
         }
-        save(templatetasks,createdById);
-        
+        save(templateTasks, createdById);
     }
 
     void deleteTemplateTaskByTemplate(Template template){

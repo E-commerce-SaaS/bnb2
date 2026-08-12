@@ -29,7 +29,11 @@ public class TemplateEditService extends BaseJpaRepoEditService<Template,Templat
         activityLogForm.setSessionUserId(templateRegisterForm.getSessionUserId());
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
 
-        templateTaskEditService.registerTemplateTask(template,List.copyOf(templateRegisterForm.getTemplateIds()), templateRegisterForm.getSessionUserId());
+        templateTaskEditService.registerTemplateTask(
+            template,
+            List.copyOf(templateRegisterForm.getTemplateIds()),
+            templateRegisterForm.getSessionUserId()
+        );
 
         return template;
     }

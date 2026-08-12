@@ -25,8 +25,8 @@ import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 public class TemplateController {
     private TemplateEditService templateEditService;
 
-    @PreAuthorize("hasAuthority('CREATE_TASK_TEMPLATE')")
-    @PostMapping("resigter")
+    @PreAuthorize("hasAuthority('REGISTER_TASK_TEMPLATE')")
+    @PostMapping("register")
     public EntityApiResponse<TemplateView> register(
             @RequestBody @Valid TemplateRegisterForm form,
             Authentication auth,
@@ -34,7 +34,7 @@ public class TemplateController {
         form.setSessionUserId(auth.getName());
         var template = templateEditService.resigterTemplate(form);
         return new EntityApiResponse<>(
-            Message.get("template.creation.success", locale),
+            Message.get("template.registration.success", locale),
             new TemplateView(template)
         );
     }
