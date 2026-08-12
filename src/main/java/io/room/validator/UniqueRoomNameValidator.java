@@ -10,7 +10,7 @@ import org.apache.commons.lang.WordUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UniqueRoomNameValidator extends BaseJpaRepoReadService<Room, RoomRepository> implements ConstraintValidator<UniqueRoomName, String>{
+class UniqueRoomNameValidator extends BaseJpaRepoReadService<Room, RoomRepository> implements ConstraintValidator<UniqueRoomName, String>{
     @Override
     public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
         String sanitizedName = WordUtils.capitalize(StringUtils.trimToEmpty(name));
