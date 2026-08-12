@@ -27,7 +27,7 @@ public class TemplateEditService extends BaseJpaRepoEditService<Template,Templat
         
         var activityLogForm = new CreateActivityLogForm();
         activityLogForm.setOwningEntityId(template.getEntityId());
-        activityLogForm.setAction("Auth group creation");
+        activityLogForm.setAction("template creation");
         activityLogForm.setSessionUserId(templateRegisterForm.getSessionUserId());
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
 
