@@ -1,6 +1,7 @@
 package io.task.controller;
 
 import java.util.Locale;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,10 +17,8 @@ import io.task.form.TemplateRegisterForm;
 import io.lib.service.Message;
 import io.lib.view.EntityApiResponse;
 
-import io.task.entity.Template;
 
 import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
-
 
 @RestController
 @RequestMapping(INTERNAL_USER_BASE_URL + "/templates")
@@ -29,23 +28,19 @@ public class TemplateController {
     @PreAuthorize("hasAuthority('CREATE_TASK_TEMPLATE')")
     @PostMapping("resigter")
     public EntityApiResponse<TemplateView> register(
-        @RequestBody @Valid TemplateRegisterForm templateRegisterForm,
-        Authentication auth,
-        Locale locale){
-            templateRegisterForm.setSessionUserId(auth.getName());
-            Template template = templateEditService.resigterTemplate(templateRegisterForm);
-            return new EntityApiResponse<>(
-                Message.get("template.creation.success", locale),
-                new TemplateView(template)
-            );
-
-        }
-    
+            @RequestBody @Valid TemplateRegisterForm form,
+            Authentication auth,
+            Locale locale) {
+        form.setSessionUserId(auth.getName());
+        var template = templateEditService.resigterTemplate(form);
+        return new EntityApiResponse<>(
+            Message.get("template.creation.success", locale),
+            new TemplateView(template)
+        );
+    }
 
     @Autowired
-    public void setTemplateEditService (TemplateEditService templateEditService){
-        this.templateEditService = templateEditService;
+    public void setTemplateEditService(TemplateEditService service) {
+        this.templateEditService = service;
     }
-   
-
 }

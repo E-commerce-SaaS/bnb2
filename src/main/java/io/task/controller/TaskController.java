@@ -26,7 +26,7 @@ public class TaskController {
     private TaskEditService taskEditService;
     private TaskReadService taskReadService;
 
-    @PreAuthorize("hasAuthority('VIEW_TASKS')")
+    @PreAuthorize("hasAuthority('VIEW_TASK')")
     @GetMapping("list")
     public PagedEntityApiResponse<TaskView> list(
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
