@@ -16,6 +16,7 @@ public interface TaskRepository extends BaseJpaRepository<Task> {
         return (root, cq, cb) -> cb.like(root.get("name"), "%" + keyword +"%");
     }
 
+     
 }
 
 
