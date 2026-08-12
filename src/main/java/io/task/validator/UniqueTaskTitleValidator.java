@@ -7,8 +7,10 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.springframework.stereotype.Component;
 
-public class UniqueTaskTitleValidator extends BaseJpaRepoReadService<Task, TaskRepository> implements ConstraintValidator<UniqueTaskTitle, String> {
+@Component
+class UniqueTaskTitleValidator extends BaseJpaRepoReadService<Task, TaskRepository> implements ConstraintValidator<UniqueTaskTitle, String> {
     @Override
     public boolean isValid(String taskTitle, ConstraintValidatorContext constraintValidatorContext) {
         String sanitizedTaskTitle = WordUtils.capitalize(StringUtils.trimToEmpty(taskTitle));
