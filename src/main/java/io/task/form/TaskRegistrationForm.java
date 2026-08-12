@@ -1,10 +1,11 @@
 package io.task.form;
 
-import lombok.Getter;
-import lombok.Setter;
+import io.task.validator.UniqueTaskTitle;
 
-@Getter
-@Setter
 public class TaskRegistrationForm extends TaskEditForm{
 
+    @UniqueTaskTitle
+    public String getTaskTitle(){
+        return super.getTaskTitle();
+    }
 }

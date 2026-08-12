@@ -6,6 +6,7 @@ import io.lib.view.EntityApiResponse;
 import io.lib.view.PagedEntityApiResponse;
 import io.task.form.TaskEditForm;
 import io.task.form.TaskFetchForm;
+import io.task.form.TaskRegistrationForm;
 import io.task.service.TaskEditService;
 import io.task.service.TaskReadService;
 import io.task.view.TaskView;
@@ -26,7 +27,7 @@ public class TaskController {
     private TaskReadService taskReadService;
 
     @PreAuthorize("hasAuthority('VIEW_TASKS')")
-    @GetMapping
+    @GetMapping("list")
     public PagedEntityApiResponse<TaskView> list(
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "100") Integer pageSize,
@@ -43,7 +44,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('REGISTER_TASK')")
     @PostMapping("register")
     public EntityApiResponse<TaskView> registerTask(
-            @RequestBody @Valid TaskEditForm form,
+            @RequestBody @Valid TaskRegistrationForm form,
             Authentication auth,
             Locale locale) {
         form.setSessionUserId(auth.getName());
