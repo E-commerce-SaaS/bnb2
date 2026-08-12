@@ -3,22 +3,21 @@ package io.task.service;
 import io.activitylog.form.CreateActivityLogForm;
 import io.lib.exception.CommonRuntimeException;
 import io.lib.exception.ExceptionType;
+import io.lib.form.SessionUserIdForm;
 import io.lib.service.BaseJpaRepoEditService;
 import io.task.entity.Task;
 import io.task.form.TaskEditForm;
-import io.task.form.TaskRegistrationForm;
 import io.task.repository.TaskRepository;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 public class TaskEditService extends BaseJpaRepoEditService<Task, TaskRepository> {
 
-    public Task registerTask(TaskRegistrationForm form){
+    public Task registerTask(TaskEditForm form){
 
         var task = new Task();
         task.setTaskTitle(form.getTaskTitle());
+        task.setTaskDescription(form.getTaskDescription());
         task.setCreatedByEntityId(form.getSessionUserId());
 
         task = save(task, form.getSessionUserId());
@@ -53,19 +52,15 @@ public class TaskEditService extends BaseJpaRepoEditService<Task, TaskRepository
         return task;
     }
 
-    public void softDeleteTask(String entityId, TaskEditForm editForm) {
-        Task task = repository.findByEntityId(entityId)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
-
-        task.setDeletedAt(LocalDateTime.now());
-        task.setDeletedByEntityId(editForm.getSessionUserId());
-
-        repository.save(task);
+    public void softDeleteTask(String entityId, SessionUserIdForm deleteForm) {
+        var task = findByEntityId(entityId);
+        delete(task, deleteForm.getSessionUserId());
     }
 
     private boolean taskExists(String taskId, String taskTitle){
         var spec = repository.notDeleted()
-                .and(repository.taskTitleIs(taskTitle).and(repository.entityIdNot(taskId)));
+            .and(repository.taskTitleIs(taskTitle)
+            .and(repository.entityIdNot(taskId)));
 
         return repository.exists(spec);
     }

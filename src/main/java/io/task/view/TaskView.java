@@ -8,4 +8,10 @@ public class TaskView extends BaseView<Task> {
         super(entity);
     }
 
+    public String getTaskTitle(){
+        return entity.getTaskTitle();
+    }
+
+    public String getTaskDescription() { return entity.getTaskDescription(); }
+
 }

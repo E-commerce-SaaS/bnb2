@@ -1,11 +1,11 @@
 package io.task.controller;
 
+import io.lib.form.SessionUserIdForm;
 import io.lib.service.Message;
 import io.lib.view.EntityApiResponse;
 import io.lib.view.PagedEntityApiResponse;
 import io.task.form.TaskEditForm;
 import io.task.form.TaskFetchForm;
-import io.task.form.TaskRegistrationForm;
 import io.task.service.TaskEditService;
 import io.task.service.TaskReadService;
 import io.task.view.TaskView;
@@ -43,7 +43,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('REGISTER_TASK')")
     @PostMapping("register")
     public EntityApiResponse<TaskView> registerTask(
-            @RequestBody @Valid TaskRegistrationForm form,
+            @RequestBody @Valid TaskEditForm form,
             Authentication auth,
             Locale locale) {
         form.setSessionUserId(auth.getName());
@@ -73,9 +73,9 @@ public class TaskController {
     @PreAuthorize("hasAuthority('DELETE_TASK')")
     @PostMapping("delete/{entityId}")
     public void delete(
-            @RequestBody @Valid TaskEditForm form,
             @PathVariable String entityId,
             Authentication auth) {
+        var form = new SessionUserIdForm();
         form.setSessionUserId(auth.getName());
         taskEditService.softDeleteTask(entityId, form);
     }
@@ -84,6 +84,7 @@ public class TaskController {
     public void setTaskEditService(TaskEditService service) {
         this.taskEditService = service;
     }
+
 
     @Autowired
     public void setTaskReadService(TaskReadService service) {
