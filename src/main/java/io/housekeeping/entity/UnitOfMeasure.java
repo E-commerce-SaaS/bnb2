@@ -13,5 +13,6 @@ public enum UnitOfMeasure {
     GRAM,
     LITRE,
     MILLILITRE,
-    ROLL
+    ROLL,
+    TUBE
 }
