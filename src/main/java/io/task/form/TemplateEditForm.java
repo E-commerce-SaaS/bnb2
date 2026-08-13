@@ -30,6 +30,4 @@ public class TemplateEditForm extends SessionUserIdForm{
         return WordUtils.capitalize(StringUtils.trimToEmpty(name)).trim();
     }
 
-    
-
 }
