@@ -72,7 +72,6 @@ public class TemplateEditService extends BaseJpaRepoEditService<Template,Templat
             templateEditForm.getSessionUserId()
         );
 
-
         return template;
     }
     public void deleteTemplate(String entityId, SessionUserIdForm sessionUserIdForm) {
