@@ -13,5 +13,4 @@ public @interface UniqueTemplateName {
     String message() default "error.duplicate.name";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
-
 }

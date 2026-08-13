@@ -31,6 +31,7 @@ public class TemplateTaskEditService extends BaseJpaRepoEditService<TemplateTask
             templateTask.setCreatedByEntityId(createdById);
 
             templateTasks.add(templateTask);
+            
         }
         save(templateTasks, createdById);
     }
@@ -39,7 +40,7 @@ public class TemplateTaskEditService extends BaseJpaRepoEditService<TemplateTask
         Specification<TemplateTask> spec = repository.notDeleted()
         .and(repository.templateIdIn(List.of(template)));
         repository.deleteAll(repository.findAll(spec));
-
+        
     }
 
 

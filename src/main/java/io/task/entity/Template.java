@@ -3,6 +3,7 @@ package io.task.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.stream.Collectors;
 import io.lib.entity.BaseJpaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,5 +24,12 @@ public class Template extends BaseJpaEntity{
     
     @OneToMany(mappedBy = "template")
     private Set<TemplateTask> templateTasks = new HashSet<>();
+    public Set<TemplateTask> getTemplateTasks(){
+        if(templateTasks ==null){
+            return new HashSet<>();
+        }
+        return templateTasks.stream().filter(d -> !d.getIsDeleted()).collect(Collectors.toSet());
+
+    }
 
 }
