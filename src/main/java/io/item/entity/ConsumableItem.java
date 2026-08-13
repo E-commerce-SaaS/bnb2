@@ -1,4 +1,4 @@
-package io.housekeeping.entity;
+package io.item.entity;
 
 
 import io.lib.entity.BaseJpaEntity;
@@ -23,6 +23,4 @@ public class ConsumableItem extends BaseJpaEntity {
     private UnitOfMeasure unitOfMeasure;
 
     private Integer parLevel;
-
-
 }

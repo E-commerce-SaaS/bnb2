@@ -1,4 +1,4 @@
-package io.housekeeping.entity;
+package io.item.entity;
 
 public enum UnitOfMeasure {
 

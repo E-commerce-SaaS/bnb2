@@ -1,8 +1,8 @@
-package io.housekeeping.service;
+package io.item.service;
 
-import io.housekeeping.entity.ConsumableItem;
-import io.housekeeping.form.FetchConsumableItemForm;
-import io.housekeeping.repository.ConsumableItemRepository;
+import io.item.entity.ConsumableItem;
+import io.item.repository.ConsumableItemRepository;
+import io.lib.form.BaseFetchForm;
 import io.lib.service.BaseJpaRepoReadService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConsumableItemReadService extends BaseJpaRepoReadService<ConsumableItem, ConsumableItemRepository> {
 
-    public Page<ConsumableItem> listConsumableItems(FetchConsumableItemForm form){
+    public Page<ConsumableItem> listConsumableItems(BaseFetchForm form){
 
         var specification = repository.notDeleted();
 
@@ -25,6 +25,4 @@ public class ConsumableItemReadService extends BaseJpaRepoReadService<Consumable
                 repository.defaultPageable(form)
         );
     }
-
-
 }

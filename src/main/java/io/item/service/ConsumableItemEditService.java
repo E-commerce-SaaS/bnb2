@@ -1,42 +1,36 @@
-package io.housekeeping.service;
+package io.item.service;
 
 import io.activitylog.form.CreateActivityLogForm;
-import io.housekeeping.entity.ConsumableItem;
-import io.housekeeping.form.ConsumableItemEditForm;
-import io.housekeeping.form.ConsumableItemRegistrationForm;
-import io.housekeeping.repository.ConsumableItemRepository;
+import io.item.entity.ConsumableItem;
+import io.item.form.ConsumableItemEditForm;
+import io.item.form.ConsumableItemRegistrationForm;
+import io.item.repository.ConsumableItemRepository;
 import io.lib.exception.CommonRuntimeException;
 import io.lib.exception.ExceptionType;
 import io.lib.service.BaseJpaRepoEditService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ConsumableItemEditService extends BaseJpaRepoEditService<ConsumableItem, ConsumableItemRepository> {
 
-    private ConsumableItemRepository consumableItemRepository;
-
     public ConsumableItem register(ConsumableItemRegistrationForm form){
 
-        var consumableItem = new ConsumableItem();
+        var item = new ConsumableItem();
+        item.setName(form.getName());
+        item.setDescription(form.getDescription());
+        item.setUnitOfMeasure(form.getUnitOfMeasure());
+        item.setParLevel(form.getParLevel());
+        item.setCreatedByEntityId(form.getSessionUserId());
 
-        consumableItem.setName(form.getName());
-        consumableItem.setDescription(form.getDescription());
-        consumableItem.setUnitOfMeasure(form.getUnitOfMeasure());
-        consumableItem.setParLevel(form.getParLevel());
-
-        consumableItem.setCreatedByEntityId(form.getSessionUserId());
-
-        consumableItem = save(consumableItem, form.getSessionUserId()
-        );
+        item = save(item, form.getSessionUserId());
 
         var activityLogForm = new CreateActivityLogForm();
-        activityLogForm.setOwningEntityId(consumableItem.getEntityId());
+        activityLogForm.setOwningEntityId(item.getEntityId());
         activityLogForm.setAction("Consumable item creation");
         activityLogForm.setSessionUserId(form.getSessionUserId());
+        activityLogQueuingService.enqueueActivityLog(activityLogForm);
 
-        return consumableItem;
-
+        return item;
     }
 
     public ConsumableItem update(String consumableItemId, ConsumableItemEditForm form){
@@ -49,10 +43,7 @@ public class ConsumableItemEditService extends BaseJpaRepoEditService<Consumable
         consumableItem.setUnitOfMeasure(form.getUnitOfMeasure());
         consumableItem.setParLevel(form.getParLevel());
 
-        consumableItem = save(
-                consumableItem,
-                form.getSessionUserId()
-        );
+        consumableItem = save(consumableItem, form.getSessionUserId());
 
         var activityLogForm = new CreateActivityLogForm();
         activityLogForm.setOwningEntityId(consumableItem.getEntityId());
@@ -62,26 +53,22 @@ public class ConsumableItemEditService extends BaseJpaRepoEditService<Consumable
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
 
         return consumableItem;
-
     }
 
     public void delete(String consumableItemId, String sessionUserId){
 
         var  consumableItem = findByEntityId(consumableItemId);
-
         delete(consumableItem, sessionUserId);
 
         var activityLogForm = new CreateActivityLogForm();
-        activityLogForm.setOwningEntityId(consumableItem.getEntityId());
+        activityLogForm.setOwningEntityId(consumableItemId);
         activityLogForm.setAction("Consumable item deleted");
         activityLogForm.setSessionUserId(sessionUserId);
 
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
-
     }
 
     private void checkNameExists(String consumableItemId, String name) {
-
         var specification = repository.notDeleted()
                 .and(repository.nameIs(name))
                 .and(repository.entityIdNot(consumableItemId));
@@ -90,14 +77,9 @@ public class ConsumableItemEditService extends BaseJpaRepoEditService<Consumable
 
         if (exists) {
             throw new CommonRuntimeException(
-                    ExceptionType.BAD_REQUEST,
-                    "error.duplicate.name"
+                ExceptionType.BAD_REQUEST,
+                "error.duplicate.name"
             );
         }
-    }
-
-    @Autowired
-    public void setConsumableItemRepository(ConsumableItemRepository consumableItemRepository) {
-        this.consumableItemRepository = consumableItemRepository;
     }
 }

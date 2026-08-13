@@ -1,6 +1,6 @@
-package io.housekeeping.repository;
+package io.item.repository;
 
-import io.housekeeping.entity.ConsumableItem;
+import io.item.entity.ConsumableItem;
 import io.lib.repository.BaseJpaRepository;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,11 +14,6 @@ public interface ConsumableItemRepository extends BaseJpaRepository<ConsumableIt
         return (root, cb, cq) ->cq.like(
                 cq.lower(root.get("name")), "%" + name.toLowerCase() + "%"
         );
-    }
-
-    default Specification<ConsumableItem> entityIdNot(String entityId) {
-        return (root, cb, cq) ->
-                cq.notEqual(root.get("entityId"), entityId);
     }
 }
 
