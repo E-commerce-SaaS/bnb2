@@ -37,7 +37,6 @@ public class ConsumableItemEditService extends BaseJpaRepoEditService<Consumable
         checkNameExists(consumableItemId, form.getName());
 
         var  consumableItem = findByEntityId(consumableItemId);
-
         consumableItem.setName(form.getName());
         consumableItem.setDescription(form.getDescription());
         consumableItem.setUnitOfMeasure(form.getUnitOfMeasure());
