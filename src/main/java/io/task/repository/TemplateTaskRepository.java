@@ -10,7 +10,7 @@ import io.task.entity.TemplateTask;
 
 public interface TemplateTaskRepository extends BaseJpaRepository<TemplateTask> {
     default Specification<TemplateTask> templateIdIn(List<Template> templates){
-        return (root ,query,builder) ->root.get("templateTask").in(templates);
+        return (root ,query,builder) ->root.get("template").in(templates);
     }
 
 }

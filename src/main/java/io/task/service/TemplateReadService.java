@@ -5,18 +5,17 @@ import io.lib.service.BaseJpaRepoReadService;
 import io.task.entity.Template;
 import io.task.repository.TemplateRepository;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.apache.commons.lang.StringUtils;
 
 @Service
 public class TemplateReadService extends BaseJpaRepoReadService<Template, TemplateRepository> {
 
      public Page<Template>ListTemplates(BaseFetchForm baseFetchForm){
         var spec = repository.notDeleted();
-        if (!baseFetchForm.getQuery().isBlank()){
+        if (StringUtils.isNotBlank(baseFetchForm.getQuery())){
             spec = spec.and(repository.nameLike(baseFetchForm.getQuery())
             .or(repository.descriptionLike(baseFetchForm.getQuery())));
         }
@@ -25,9 +24,6 @@ public class TemplateReadService extends BaseJpaRepoReadService<Template, Templa
         return repository.findAll(spec,pageable);
     }
 
-    public Optional<Template> FindTemplateById (String templateId){
-       
-        return repository.findByEntityId(templateId);
-    }
+   
 
 }

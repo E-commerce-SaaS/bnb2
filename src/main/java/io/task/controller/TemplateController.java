@@ -2,6 +2,7 @@ package io.task.controller;
 
 import java.util.Locale;
 
+import io.lib.form.SessionUserIdForm;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.task.service.TemplateEditService;
 import io.task.service.TemplateReadService;
-
 import io.task.view.TemplateView;
 import jakarta.validation.Valid;
+import io.task.form.TemplateEditForm;
 import io.task.form.TemplateRegisterForm;
 import io.lib.form.BaseFetchForm;
 import io.lib.service.Message;
@@ -36,31 +37,28 @@ public class TemplateController {
     @PostMapping("register")
     public EntityApiResponse<TemplateView> register(
             @RequestBody @Valid TemplateRegisterForm form,
-            Authentication auth,
-            Locale locale) {
+            Authentication auth
+           ) {
         form.setSessionUserId(auth.getName());
         var template = templateEditService.resigterTemplate(form);
         return new EntityApiResponse<>(
-            Message.get("template.registration.success", locale),
             new TemplateView(template)
         );
     }
 
-    @PreAuthorize("hasAuthority('View_TEMPLATE_BY_ID')")
-    @GetMapping("{templateId}")
-    public EntityApiResponse<TemplateView> veiwSingleTemplate(
-        @PathVariable String templateId,
-        Locale locale ){
-        var template = templateReadService.FindTemplateById(templateId)
-        .orElseThrow(() -> new RuntimeException("Template not found"));
+    @PreAuthorize("hasAuthority('VIEW_TEMPLATE')")
+    @GetMapping("fetch/{templateId}")
+    public EntityApiResponse<TemplateView>  fetchTemplate(
+        @PathVariable String templateId
+        ){
+        var template = templateReadService.findByEntityId(templateId);      
         return new EntityApiResponse<>(
-            Message.get("template.list.success",locale),
             new TemplateView(template)
         );
 
     }
 
-    @PreAuthorize("hasAuthority('VIEW_TEMPLATES')")
+    @PreAuthorize("hasAuthority('VIEW_TEMPLATE')")
     @GetMapping("list")
     public PagedEntityApiResponse<TemplateView> list(
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
@@ -74,6 +72,38 @@ public class TemplateController {
         var views = page.stream().map(TemplateView::new).toList();
         return new PagedEntityApiResponse<>(page, views);
     }
+
+    @PreAuthorize("hasAuthority('EDIT_TEMPLATE')")
+    @PostMapping("edit/{templateId}")
+    public EntityApiResponse<TemplateView> editTemplate(
+        @PathVariable
+        String templateId,
+        Authentication auth,
+        @RequestBody  TemplateEditForm form,
+        Locale locale
+    ){
+        form.setSessionUserId(auth.getName());
+        var template = templateEditService.editTemplate(form, templateId);
+        return new EntityApiResponse<>(
+            Message.get("Template.edit.success", locale),
+            new TemplateView(template)
+        );
+
+    }
+
+    @PreAuthorize("hasAuthority('DELETE_TEMPLATE')")
+    @PostMapping("delete/{templateId}")
+    public void delete(
+            @PathVariable String templateId,
+            Authentication auth) {
+        var sessionuser = new SessionUserIdForm();
+        sessionuser.setSessionUserId(auth.getName());
+        templateEditService.deleteTemplate(templateId, sessionuser);
+    }
+
+
+
+
 
 
     @Autowired
