@@ -3,6 +3,7 @@ package io.task.controller;
 import java.util.Locale;
 
 import io.lib.form.SessionUserIdForm;
+import io.lib.view.ApiResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,11 +38,13 @@ public class TemplateController {
     @PostMapping("register")
     public EntityApiResponse<TemplateView> register(
             @RequestBody @Valid TemplateRegisterForm form,
-            Authentication auth
+            Authentication auth,
+            Locale locale
            ) {
         form.setSessionUserId(auth.getName());
         var template = templateEditService.resigterTemplate(form);
         return new EntityApiResponse<>(
+            Message.get("template.registration.success", locale),
             new TemplateView(template)
         );
     }
@@ -85,25 +88,24 @@ public class TemplateController {
         form.setSessionUserId(auth.getName());
         var template = templateEditService.editTemplate(form, templateId);
         return new EntityApiResponse<>(
-            Message.get("Template.edit.success", locale),
+            Message.get("template.edit.success", locale),
             new TemplateView(template)
         );
-
     }
 
     @PreAuthorize("hasAuthority('DELETE_TEMPLATE')")
     @PostMapping("delete/{templateId}")
-    public void delete(
+    public ApiResponse delete(
             @PathVariable String templateId,
-            Authentication auth) {
-        var sessionuser = new SessionUserIdForm();
-        sessionuser.setSessionUserId(auth.getName());
-        templateEditService.deleteTemplate(templateId, sessionuser);
+            Authentication auth,
+            Locale locale) {
+        var form = new SessionUserIdForm();
+        form.setSessionUserId(auth.getName());
+        templateEditService.deleteTemplate(templateId, form);
+        return new ApiResponse(
+                Message.get("template.deletion.success", locale)
+        );
     }
-
-
-
-
 
 
     @Autowired
