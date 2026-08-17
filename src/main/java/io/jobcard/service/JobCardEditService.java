@@ -10,7 +10,6 @@ import io.jobcard.form.JobCardStatusEditingForm;
 import io.jobcard.repository.JobCardRepository;
 import io.lib.exception.CommonRuntimeException;
 import io.lib.exception.ExceptionType;
-import io.lib.exception.ResourceNotFoundException;
 import io.lib.form.SessionUserIdForm;
 import io.lib.service.BaseJpaRepoEditService;
 import io.room.service.RoomReadService;
@@ -105,7 +104,7 @@ public class JobCardEditService extends BaseJpaRepoEditService<JobCard, JobCardR
 
 
         JobCard jobCard = repository.findOne(spec)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("JobCard with ID '%s' was not found or has been deleted.", jobCardId)));
+                .orElseThrow(() -> new CommonRuntimeException(ExceptionType.NOT_FOUND,  "error.invalid.job.card.id"));
 
         if (jobCard.getStatus() != null && invalidCurrentStatuses.contains(jobCard.getStatus())) {
             throw new CommonRuntimeException(ExceptionType.BAD_REQUEST, "error.invalid.status");
@@ -128,10 +127,10 @@ public class JobCardEditService extends BaseJpaRepoEditService<JobCard, JobCardR
                 .and(repository.notDeleted());
 
         JobCard jobCard = repository.findOne(spec)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("JobCard with ID '%s' was not found or has been deleted.", jobCardId)));
+                .orElseThrow(() -> new CommonRuntimeException(ExceptionType.NOT_FOUND,  "error.invalid.job.card.id"));
 
         if (newStatus == JobCardStatus.DONE && !jobCardReadService.allJobCardTasksAreDone(jobCardId)) {
-            throw new IllegalStateException("Cannot change status to DONE because associated tasks are incomplete.");
+            throw new CommonRuntimeException(ExceptionType.FORBIDDEN, "jobcard.status.update.fail");
         }
 
         jobCard.setStatus(newStatus);
