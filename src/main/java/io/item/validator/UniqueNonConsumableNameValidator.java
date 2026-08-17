@@ -10,7 +10,8 @@ import org.apache.commons.lang.WordUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UniqueNonConsumableNameValidator extends BaseJpaRepoReadService<NonConsumableItem, NonConsumableItemRepository> implements ConstraintValidator<UniqueNonConsumableName, String>{
+public class UniqueNonConsumableNameValidator extends BaseJpaRepoReadService<NonConsumableItem, NonConsumableItemRepository>
+ implements ConstraintValidator<UniqueNonConsumableName, String>{
     @Override
     public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
         String sanitizedName = WordUtils.capitalize(StringUtils.trimToEmpty(name));
