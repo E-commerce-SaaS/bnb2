@@ -14,8 +14,8 @@ public interface JobCardRepository extends BaseJpaRepository<JobCard>, JpaSpecif
         return (root, query, cb) -> cb.equal(root.get("staff").get("entityId"), staffEntityId);
     }
 
-    default Specification<JobCard> hasId(String id) {
-        return (root, query, cb) -> cb.equal(root.get("id"), id);
+    default Specification<JobCard> hasEntityId(String id) {
+        return (root, query, cb) -> cb.equal(root.get("entityId"), id);
     }
 
     default Specification<JobCard> notDeleted() {

@@ -6,6 +6,7 @@ import io.jobcard.entity.JobCard;
 import io.jobcard.form.JobCardCreationForm;
 import io.jobcard.form.JobCardEditingForm;
 import io.jobcard.entity.JobCardStatus;
+import io.jobcard.form.JobCardStatusEditingForm;
 import io.jobcard.repository.JobCardRepository;
 import io.lib.exception.CommonRuntimeException;
 import io.lib.exception.ExceptionType;
@@ -15,6 +16,8 @@ import io.lib.service.BaseJpaRepoEditService;
 import io.room.service.RoomReadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class JobCardEditService extends BaseJpaRepoEditService<JobCard, JobCardRepository> {
@@ -52,17 +55,10 @@ public class JobCardEditService extends BaseJpaRepoEditService<JobCard, JobCardR
             throw new CommonRuntimeException(ExceptionType.BAD_REQUEST, "error.duplicate.jobcard");
         }
 
-        if(editForm.getStatus().equals(JobCardStatus.DONE) || editForm.getStatus().equals(JobCardStatus.INSPECTED)){
-            if(!jobCardReadService.allJobCardTasksAreDone(jobCardId)){
-                throw new CommonRuntimeException(ExceptionType.BAD_REQUEST, "error.incomplete.jobcard.tasks");
-            }
-        }
-
         var staff = internalUserReadService.findByEntityId(editForm.getStaffEntityId());
 
         var jobCard = findByEntityId(jobCardId);
         jobCard.setStaff(staff);
-        jobCard.setStatus(editForm.getStatus());
 
         save(jobCard ,editForm.getSessionUserId());
 
@@ -80,8 +76,55 @@ public class JobCardEditService extends BaseJpaRepoEditService<JobCard, JobCardR
         delete(jobCard, deleteForm.getSessionUserId());
     }
 
-    public void updateStatus(String jobCardId, JobCardStatus newStatus) {
-        var spec = repository.hasId(jobCardId)
+    public JobCard markJobCardAsWorkInProgress(String jobCardId, JobCardStatusEditingForm editForm){
+
+        List<JobCardStatus> inValidStatuses = List.of(JobCardStatus.DONE, JobCardStatus.INSPECTED);
+
+        return(movingTheStatusFromOneLevelToTheNext(jobCardId, editForm, inValidStatuses));
+    }
+
+    public JobCard markJobCardAsDone(String jobCardId, JobCardStatusEditingForm editForm){
+
+        List<JobCardStatus> inValidStatuses = List.of(JobCardStatus.INSPECTED);
+
+        return(movingTheStatusFromOneLevelToTheNext(jobCardId, editForm, inValidStatuses));
+    }
+
+    public JobCard markJobCardAsInspected(String jobCardId, JobCardStatusEditingForm editForm){
+
+
+        List<JobCardStatus> inValidStatuses = List.of(JobCardStatus.WORK_IN_PROGRESS);
+
+        return(movingTheStatusFromOneLevelToTheNext(jobCardId, editForm, inValidStatuses));
+
+    }
+
+    private JobCard movingTheStatusFromOneLevelToTheNext(String jobCardId, JobCardStatusEditingForm editForm, List<JobCardStatus> invalidCurrentStatuses){
+        var spec = repository.hasEntityId(jobCardId)
+                .and(repository.notDeleted());
+
+
+        JobCard jobCard = repository.findOne(spec)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("JobCard with ID '%s' was not found or has been deleted.", jobCardId)));
+
+        if (jobCard.getStatus() != null && invalidCurrentStatuses.contains(jobCard.getStatus())) {
+            throw new CommonRuntimeException(ExceptionType.BAD_REQUEST, "error.invalid.status");
+        }
+
+        var  updatedJobCard = updateStatus(jobCardId, editForm.getStatus(), editForm.getSessionUserId());
+
+        var activityLogForm = new CreateActivityLogForm();
+        activityLogForm.setOwningEntityId(jobCard.getEntityId());
+        activityLogForm.setAction("Job card status update");
+        activityLogForm.setSessionUserId(editForm.getSessionUserId());
+        activityLogQueuingService.enqueueActivityLog(activityLogForm);
+
+        return updatedJobCard;
+
+    }
+
+    public JobCard updateStatus(String jobCardId, JobCardStatus newStatus, String statusUpdatedByEntityId) {
+        var spec = repository.hasEntityId(jobCardId)
                 .and(repository.notDeleted());
 
         JobCard jobCard = repository.findOne(spec)
@@ -92,6 +135,9 @@ public class JobCardEditService extends BaseJpaRepoEditService<JobCard, JobCardR
         }
 
         jobCard.setStatus(newStatus);
+        jobCard = save(jobCard, statusUpdatedByEntityId);
+
+        return jobCard;
     }
 
     private boolean jobCardExists(String jobCardId, String staffEntityId) {

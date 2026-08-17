@@ -53,7 +53,7 @@ public class JobCardTaskEditService extends BaseJpaRepoEditService<JobCardTask, 
 
         save(jobCardTask, editForm.getSessionUserId());
 
-        updateStatusInTheJobCard(jobCardEntityId);
+        updateStatusInTheJobCard(jobCardEntityId, editForm.getSessionUserId());
 
         var activityLogForm = new CreateActivityLogForm();
         activityLogForm.setOwningEntityId(jobCardTask.getEntityId());
@@ -70,11 +70,12 @@ public class JobCardTaskEditService extends BaseJpaRepoEditService<JobCardTask, 
         delete(jobCardTask, deleteForm.getSessionUserId());
     }
 
-    private void updateStatusInTheJobCard(String jobCardEntityId) {
+    private void updateStatusInTheJobCard(String jobCardEntityId, String currentUserEntityId) {
         if (jobCardReadService.allJobCardTasksAreDone(jobCardEntityId)) {
             jobCardEditService.updateStatus(
                     jobCardEntityId,
-                    JobCardStatus.DONE
+                    JobCardStatus.DONE,
+                    currentUserEntityId
             );
         }
     }

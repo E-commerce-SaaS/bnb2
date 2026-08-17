@@ -1,8 +1,10 @@
 package io.jobcard.controller;
 
+import io.jobcard.entity.JobCardStatus;
 import io.jobcard.form.JobCardCreationForm;
 import io.jobcard.form.JobCardEditingForm;
 import io.jobcard.form.JobCardFetchForm;
+import io.jobcard.form.JobCardStatusEditingForm;
 import io.jobcard.service.JobCardEditService;
 import io.jobcard.service.JobCardReadService;
 import io.jobcard.view.JobCardView;
@@ -80,6 +82,54 @@ public class JobCardController {
         var form = new SessionUserIdForm();
         form.setSessionUserId(auth.getName());
         jobCardEditService.softDeleteJobCard(entityId, form);
+    }
+
+    @PreAuthorize("hasAuthority('MARK_JOBCARD_WORKINPROGRESS')")
+    @PostMapping("{jobCardId}/update-status-to-in-progress")
+    public EntityApiResponse<JobCardView> markJobCardAsWorkInProgress(
+            @RequestBody @Valid JobCardStatusEditingForm form,
+            @PathVariable String jobCardId,
+            Authentication auth,
+            Locale locale) {
+        form.setSessionUserId(auth.getName());
+        form.setStatus(JobCardStatus.WORK_IN_PROGRESS);
+        var jobCard = jobCardEditService.markJobCardAsWorkInProgress(jobCardId, form);
+        return new EntityApiResponse<>(
+                Message.get("jobcard.status.update.success", locale),
+                new JobCardView(jobCard)
+        );
+    }
+
+    @PreAuthorize("hasAuthority('MARK_JOBCARD_DONE')")
+    @PostMapping("{jobCardId}/update-status-done")
+    public EntityApiResponse<JobCardView> markJobCardAsWork(
+            @RequestBody @Valid JobCardStatusEditingForm form,
+            @PathVariable String jobCardId,
+            Authentication auth,
+            Locale locale) {
+        form.setSessionUserId(auth.getName());
+        form.setStatus(JobCardStatus.DONE);
+        var jobCard = jobCardEditService.markJobCardAsDone(jobCardId, form);
+        return new EntityApiResponse<>(
+                Message.get("jobcard.status.update.success", locale),
+                new JobCardView(jobCard)
+        );
+    }
+
+    @PreAuthorize("hasAuthority('MARK_JOBCARD_INSPECTED')")
+    @PostMapping("{jobCardId}/update-status-to-inspected")
+    public EntityApiResponse<JobCardView> markJobCardAsInspected(
+            @RequestBody @Valid JobCardStatusEditingForm form,
+            @PathVariable String jobCardId,
+            Authentication auth,
+            Locale locale) {
+        form.setSessionUserId(auth.getName());
+        form.setStatus(JobCardStatus.INSPECTED);
+        var jobCard = jobCardEditService.markJobCardAsInspected(jobCardId, form);
+        return new EntityApiResponse<>(
+                Message.get("jobcard.status.update.success", locale),
+                new JobCardView(jobCard)
+        );
     }
 
     @Autowired

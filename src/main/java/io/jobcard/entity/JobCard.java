@@ -3,10 +3,7 @@ package io.jobcard.entity;
 import io.internaluser.entity.InternalUser;
 import io.lib.entity.BaseJpaEntity;
 import io.room.entity.Room;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +19,7 @@ public class JobCard extends BaseJpaEntity {
     private Room room;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private JobCardStatus status = JobCardStatus.WORK_IN_PROGRESS;
 
 }
