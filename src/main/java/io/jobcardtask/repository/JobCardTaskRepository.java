@@ -11,11 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface JobCardTaskRepository extends BaseJpaRepository<JobCardTask> , JpaSpecificationExecutor<JobCardTask> {
 
     default Specification<JobCardTask> jobCardEntityIdIs(String jobCardId) {
-        return (root, query, cb) -> cb.equal(root.get("jobCard").get("entityId"), jobCardId);
+        return (root, query, cb) -> cb.equal(root.get("jobCardEntityId"), jobCardId);
     }
 
     default Specification<JobCardTask> jobCardTaskIdIs(String jobCardTaskId) {
         return (root, query, cb) -> cb.equal(root.get("entityId"), jobCardTaskId);
     }
-
 }

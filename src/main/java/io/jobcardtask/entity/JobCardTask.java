@@ -3,22 +3,20 @@ package io.jobcardtask.entity;
 import io.jobcard.entity.JobCard;
 import io.lib.entity.BaseJpaEntity;
 import io.task.entity.Task;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-
 
 @Getter
 @Setter
 @Entity
+@Table(indexes = {@Index(name = "idx_job_card_entity_id_index", columnList = "jobCardEntityId")})
 public class JobCardTask extends BaseJpaEntity {
 
     @ManyToOne
     private JobCard jobCard;
+
+    private String jobCardEntityId;
 
     @ManyToOne
     private Task task;
@@ -26,4 +24,11 @@ public class JobCardTask extends BaseJpaEntity {
     @Enumerated(EnumType.STRING)
     private JobCardTaskStatus status = JobCardTaskStatus.PENDING;
 
+
+    public void setJobCard(JobCard jobCard) {
+        this.jobCard = jobCard;
+        if(this.jobCard != null){
+            this.jobCardEntityId = jobCard.getEntityId();
+        }
+    }
 }
