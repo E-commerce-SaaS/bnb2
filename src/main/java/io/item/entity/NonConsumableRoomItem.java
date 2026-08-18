@@ -1,6 +1,7 @@
 package io.item.entity;
 
 import io.lib.entity.BaseJpaEntity;
+import io.room.entity.Room;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -13,19 +14,16 @@ import lombok.Setter;
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames = {
-                "room_non_consumables_id",
-                "non_consumable_item_id"
-            }
+            columnNames = {"room_id", "non_consumable_item_id"}
         )
     }
 )
 @Getter
 @Setter
-public class RoomNonConsumableItem extends BaseJpaEntity {
+public class NonConsumableRoomItem extends BaseJpaEntity {
 
     @ManyToOne
-    private RoomNonConsumables roomNonConsumables;
+    private Room room;
 
     @ManyToOne
     private NonConsumableItem nonConsumableItem;

@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChildRoomNonConsumableItemEdit extends SessionUserIdForm{
+public class NonConsumableRoomItemEdit extends SessionUserIdForm{
 
     @NotBlank
     private String nonConsumableItemId;

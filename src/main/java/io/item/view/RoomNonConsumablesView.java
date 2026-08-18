@@ -1,37 +1,38 @@
 package io.item.view;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import io.item.entity.RoomNonConsumables;
-import io.lib.view.BaseView;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class RoomNonConsumablesView extends BaseView<RoomNonConsumables> {
+public class RoomNonConsumablesView {
 
-    public RoomNonConsumablesView(RoomNonConsumables entity) {
-        super(entity);
+    private String roomId;
+    private List<Item> items;
+
+    public RoomNonConsumablesView(
+            String roomId,
+            List<Item> items
+    ) {
+        this.roomId = roomId;
+        this.items = items;
     }
 
-    public String getRoomId() {
-        return entity.getRoom().getEntityId();
-    }
+    @Getter
+    @Setter
+    public static class Item {
 
-    public List<Map<String, Object>> getItems() {
-        List<Map<String, Object>> items = new ArrayList<>();
+        private String nonConsumableId;
+        private Integer quantity;
 
-        for (var item : entity.getItems()) {
-            Map<String, Object> itemData = new HashMap<>();
-            itemData.put("nonConsumableItemId", item.getNonConsumableItem().getEntityId());
-            itemData.put("quantity", item.getQuantity());
-            items.add(itemData);
+        public Item(
+                String nonConsumableId,
+                Integer quantity
+        ) {
+            this.nonConsumableId = nonConsumableId;
+            this.quantity = quantity;
         }
-
-        return items;
     }
 }
