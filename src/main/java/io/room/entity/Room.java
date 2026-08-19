@@ -5,17 +5,19 @@ import java.math.BigDecimal;
 import io.lib.entity.BaseJpaEntity;
 import io.lib.service.FormatUtil;
 import io.orgbranch.entity.OrgBranch;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@Table(
+    indexes = {
+            @Index(name = "idx_room_org_branch_entity_id", columnList = "orgBranchEntityId"),
+            @Index(name = "idx_room_room_category_entity_id", columnList = "roomCategoryEntityId")
+    }
+)
 public class Room extends BaseJpaEntity {
     @ManyToOne
     private OrgBranch orgBranch;
@@ -25,10 +27,12 @@ public class Room extends BaseJpaEntity {
     @Column(unique = true, length = 100)
     private String name;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private RoomCategory roomCategory;
 
-    private String floor;
+    private String roomCategoryEntityId;
+
+    private String floorNumber;
 
     @Column(precision = FormatUtil.BIG_DECIMAL_PRECISION, scale = FormatUtil.BIG_DECIMAL_SCALE)
     private BigDecimal pricePerNight;
@@ -40,6 +44,13 @@ public class Room extends BaseJpaEntity {
         this.orgBranch = orgBranch;
         if(this.orgBranch != null){
             this.orgBranchEntityId = this.orgBranch.getEntityId();
+        }
+    }
+
+    public void setRoomCategory(RoomCategory roomCategory) {
+        this.roomCategory = roomCategory;
+        if(this.roomCategory != null){
+            this.roomCategoryEntityId = this.roomCategory.getEntityId();
         }
     }
 }

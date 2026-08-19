@@ -69,6 +69,14 @@ public class OrgBranchController {
         return new PagedEntityApiResponse<>(page, views);
     }
 
+    @PreAuthorize("hasAuthority('VIEW_ORG_BRANCH')")
+    @GetMapping("fetch/{orgBranchId}")
+    public EntityApiResponse<OrgBranchView> fetch(
+            @PathVariable String orgBranchId) {
+        var branch = orgBranchReadService.findByEntityId(orgBranchId);
+        return new EntityApiResponse<>(new OrgBranchView(branch));
+    }
+
     @Autowired
     public void setOrgBranchEditService(OrgBranchEditService orgBranchEditService) {
         this.orgBranchEditService = orgBranchEditService;
