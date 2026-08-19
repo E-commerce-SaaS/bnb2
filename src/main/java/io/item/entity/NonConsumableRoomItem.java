@@ -2,20 +2,15 @@ package io.item.entity;
 
 import io.lib.entity.BaseJpaEntity;
 import io.room.entity.Room;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Min;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(
-    uniqueConstraints = {
-        @UniqueConstraint(
-            columnNames = {"room_id", "non_consumable_item_id"}
-        )
+    indexes = {
+        @Index(name = "idx_room_entity_id", columnList = "roomEntityId"),
+        @Index(name = "idx_non_consumable_item_entity_id" , columnList = "nonConsumableItemEntityId")
     }
 )
 @Getter
@@ -24,10 +19,25 @@ public class NonConsumableRoomItem extends BaseJpaEntity {
 
     @ManyToOne
     private Room room;
+    private String roomEntityId;
 
     @ManyToOne
     private NonConsumableItem nonConsumableItem;
+    private String nonConsumableItemEntityId;
 
-    @Min(0)
     private Integer quantity;
+
+    public void setRoom(Room room) {
+        this.room = room;
+        if(this.room != null){
+            this.roomEntityId = room.getEntityId();
+        }
+    }
+
+    public void setNonConsumableItem(NonConsumableItem nonConsumableItem) {
+        this.nonConsumableItem = nonConsumableItem;
+        if(this.nonConsumableItem != null){
+            this.nonConsumableItemEntityId = nonConsumableItem.getEntityId();
+        }
+    }
 }

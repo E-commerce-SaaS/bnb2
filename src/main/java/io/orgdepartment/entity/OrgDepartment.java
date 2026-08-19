@@ -12,4 +12,8 @@ import lombok.Setter;
 public class OrgDepartment extends BaseJpaEntity {
     @Column(unique = true, length = 100)
     private String name;
+
+    private String erpDepartmentCode;
+
+    private Boolean allowsExpenses;
 }
