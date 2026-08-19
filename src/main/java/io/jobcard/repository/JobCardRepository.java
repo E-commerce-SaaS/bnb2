@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 
+
 @Repository
 public interface JobCardRepository extends BaseJpaRepository<JobCard>, JpaSpecificationExecutor<JobCard> {
 
@@ -16,10 +17,6 @@ public interface JobCardRepository extends BaseJpaRepository<JobCard>, JpaSpecif
 
     default Specification<JobCard> hasEntityId(String id) {
         return (root, query, cb) -> cb.equal(root.get("entityId"), id);
-    }
-
-    default Specification<JobCard> notDeleted() {
-        return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
     }
 
 }

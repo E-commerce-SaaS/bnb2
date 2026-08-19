@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JobCardCreationForm extends AbstractJobCardForm {
+public class JobCardCreationForm extends JobCardEditingForm {
 
     @NotBlank(message = "error.invalid.room.id")
     private String roomEntityId;

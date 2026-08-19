@@ -1,8 +1,8 @@
-package io.jobcardtask.view;
+package io.jobcard.view;
 
 import io.jobcard.entity.JobCard;
-import io.jobcardtask.entity.JobCardTask;
-import io.jobcardtask.entity.JobCardTaskStatus;
+import io.jobcard.entity.JobCardTask;
+import io.jobcard.entity.JobCardTaskStatus;
 import io.lib.view.BaseView;
 import io.task.entity.Task;
 

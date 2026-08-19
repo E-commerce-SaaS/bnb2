@@ -3,11 +3,11 @@ package io.jobcard.controller;
 import io.jobcard.entity.JobCardStatus;
 import io.jobcard.form.JobCardCreationForm;
 import io.jobcard.form.JobCardEditingForm;
-import io.jobcard.form.JobCardFetchForm;
 import io.jobcard.form.JobCardStatusEditingForm;
 import io.jobcard.service.JobCardEditService;
 import io.jobcard.service.JobCardReadService;
 import io.jobcard.view.JobCardView;
+import io.lib.form.BaseFetchForm;
 import io.lib.form.SessionUserIdForm;
 import io.lib.service.Message;
 import io.lib.view.EntityApiResponse;
@@ -23,7 +23,7 @@ import java.util.Locale;
 import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 
 @RestController
-@RequestMapping(INTERNAL_USER_BASE_URL + "/jobcards")
+@RequestMapping(INTERNAL_USER_BASE_URL + "/job-cards")
 public class JobCardController {
 
     private JobCardEditService jobCardEditService;
@@ -35,7 +35,7 @@ public class JobCardController {
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
             @RequestParam(value = "pageSize", required = false, defaultValue = "100") Integer pageSize,
             @RequestParam(value = "query", required = false) String query) {
-        var form = new JobCardFetchForm();
+        var form = new BaseFetchForm();
         form.setQuery(query);
         form.setPageNum(pageNum);
         form.setPageSize(pageSize);
@@ -44,7 +44,7 @@ public class JobCardController {
         return new PagedEntityApiResponse<>(page, views);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_JOBCARD')")
+    @isJobCardCreator
     @PostMapping("create")
     public EntityApiResponse<JobCardView> registerTask(
             @RequestBody @Valid JobCardCreationForm form,
@@ -59,7 +59,7 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('EDIT_JOBCARD')")
+    @isJobCardCreator
     @PostMapping("update/{jobCardId}")
     public EntityApiResponse<JobCardView> update(
             @RequestBody @Valid JobCardEditingForm form,
@@ -74,7 +74,7 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('DELETE_JOBCARD')")
+    @isJobCardCreator
     @PostMapping("delete/{entityId}")
     public void delete(
             @PathVariable String entityId,
@@ -84,7 +84,7 @@ public class JobCardController {
         jobCardEditService.softDeleteJobCard(entityId, form);
     }
 
-    @PreAuthorize("hasAuthority('MARK_JOBCARD_WORKINPROGRESS')")
+    @isJobCardCreator
     @PostMapping("{jobCardId}/update-status-to-in-progress")
     public EntityApiResponse<JobCardView> markJobCardAsWorkInProgress(
             @RequestBody @Valid JobCardStatusEditingForm form,
@@ -100,9 +100,9 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('MARK_JOBCARD_DONE')")
+    @isJobCardCreator
     @PostMapping("{jobCardId}/update-status-done")
-    public EntityApiResponse<JobCardView> markJobCardAsWork(
+    public EntityApiResponse<JobCardView> markJobCardAsDone(
             @RequestBody @Valid JobCardStatusEditingForm form,
             @PathVariable String jobCardId,
             Authentication auth,
@@ -116,7 +116,7 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('MARK_JOBCARD_INSPECTED')")
+    @isJobCardCreator
     @PostMapping("{jobCardId}/update-status-to-inspected")
     public EntityApiResponse<JobCardView> markJobCardAsInspected(
             @RequestBody @Valid JobCardStatusEditingForm form,

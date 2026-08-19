@@ -1,4 +1,4 @@
-package io.jobcardtask.entity;
+package io.jobcard.entity;
 
 public enum JobCardTaskStatus {
 

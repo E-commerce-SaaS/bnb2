@@ -1,11 +1,11 @@
 package io.jobcard.service;
 
 import io.jobcard.entity.JobCard;
-import io.jobcard.form.JobCardFetchForm;
 import io.jobcard.repository.JobCardRepository;
-import io.jobcardtask.entity.JobCardTask;
-import io.jobcardtask.entity.JobCardTaskStatus;
-import io.jobcardtask.repository.JobCardTaskRepository;
+import io.jobcard.entity.JobCardTask;
+import io.jobcard.entity.JobCardTaskStatus;
+import io.jobcard.repository.JobCardTaskRepository;
+import io.lib.form.BaseFetchForm;
 import io.lib.service.BaseJpaRepoReadService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ public class JobCardReadService extends BaseJpaRepoReadService<JobCard, JobCardR
 
     private JobCardTaskRepository jobCardTaskRepository;
 
-    public Page<JobCard> listJobCards(JobCardFetchForm form){
+    public Page<JobCard> listJobCards(BaseFetchForm form){
         return repository.findAll(createSpecification(form),repository.defaultPageable(form));
     }
 
-    private Specification<JobCard> createSpecification(JobCardFetchForm form){
+    private Specification<JobCard> createSpecification(BaseFetchForm form){
         var spec = repository.notDeleted();
 
         if(StringUtils.isNotBlank(form.getQuery())){
@@ -33,20 +33,21 @@ public class JobCardReadService extends BaseJpaRepoReadService<JobCard, JobCardR
     }
 
     public boolean allJobCardTasksAreDone(String jobCardEntityId) {
-        Specification<JobCardTask> totalSpec = (root, query, cb) ->
-                cb.equal(root.get("jobCard").get("entityId"), jobCardEntityId);
-
-        long totalTasks = jobCardTaskRepository.count(totalSpec);
-        if (totalTasks == 0) return false;
-
-        Specification<JobCardTask> unfinishedSpec = (root, query, cb) -> cb.and(
-                cb.equal(root.get("jobCard").get("entityId"), jobCardEntityId),
-                cb.not(root.get("status").in(JobCardTaskStatus.DONE, JobCardTaskStatus.NOT_APPLICABLE))
-        );
-
-        long unfinishedTasks = jobCardTaskRepository.count(unfinishedSpec);
-
-        return unfinishedTasks == 0;
+        Specification<JobCardTask> unfinishedSpec =
+                jobCardTaskRepository.notDeleted()
+                        .and((root, query, cb) -> cb.and(
+                                cb.equal(
+                                        root.get("jobCard").get("entityId"),
+                                        jobCardEntityId
+                                ),
+                                cb.not(
+                                        root.get("status").in(
+                                                JobCardTaskStatus.DONE,
+                                                JobCardTaskStatus.NOT_APPLICABLE
+                                        )
+                                )
+                        ));
+        return !jobCardTaskRepository.exists(unfinishedSpec);
     }
 
     @Autowired

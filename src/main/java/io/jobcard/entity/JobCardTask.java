@@ -1,6 +1,5 @@
-package io.jobcardtask.entity;
+package io.jobcard.entity;
 
-import io.jobcard.entity.JobCard;
 import io.lib.entity.BaseJpaEntity;
 import io.task.entity.Task;
 import jakarta.persistence.*;

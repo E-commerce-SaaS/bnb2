@@ -1,6 +1,6 @@
-package io.jobcardtask.repository;
+package io.jobcard.repository;
 
-import io.jobcardtask.entity.JobCardTask;
+import io.jobcard.entity.JobCardTask;
 import io.lib.repository.BaseJpaRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -12,9 +12,5 @@ public interface JobCardTaskRepository extends BaseJpaRepository<JobCardTask> , 
 
     default Specification<JobCardTask> jobCardEntityIdIs(String jobCardId) {
         return (root, query, cb) -> cb.equal(root.get("jobCardEntityId"), jobCardId);
-    }
-
-    default Specification<JobCardTask> jobCardTaskIdIs(String jobCardTaskId) {
-        return (root, query, cb) -> cb.equal(root.get("entityId"), jobCardTaskId);
     }
 }
