@@ -2,6 +2,7 @@ package io.room.form;
 
 import io.lib.form.BaseFetchForm;
 import io.room.entity.ReservationStatus;
+import io.room.entity.RoomCategory;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FetchRoomForm extends BaseFetchForm {
-    private String roomCategoryId;
+    private RoomCategory roomCategory;
     private ReservationStatus reservationStatus;
-    private String orgBranchId;
+    private String branchEntityId;
 }

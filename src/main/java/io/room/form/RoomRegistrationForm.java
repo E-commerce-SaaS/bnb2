@@ -12,4 +12,8 @@ public class RoomRegistrationForm extends RoomEditForm{
     public String getName() {
         return super.getName();
     }
+
+    @NotBlank(message = "error.invalid.org.branch")
+    private String orgBranchEntityId;
+
 }

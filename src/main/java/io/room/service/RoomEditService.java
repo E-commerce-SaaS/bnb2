@@ -15,17 +15,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository> {
     private OrgBranchReadService orgBranchReadService;
-    private RoomCategoryReadService roomCategoryReadService;
 
     public Room registerRoom(RoomRegistrationForm form){
         var orgBranch = orgBranchReadService.findByEntityId(form.getOrgBranchEntityId());
-        var roomCategory = roomCategoryReadService.findByEntityId(form.getRoomCategoryEntityId());
 
         var room = new Room();
         room.setOrgBranch(orgBranch);
         room.setName(form.getName());
-        room.setFloorNumber(form.getFloorNumber());
-        room.setRoomCategory(roomCategory);
+        room.setFloor(form.getFloor());
+        room.setRoomCategory(form.getRoomCategory());
         room.setPricePerNight(form.getPricePerNight());
         room.setCreatedByEntityId(form.getSessionUserId());
 
@@ -40,25 +38,21 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
         return room;
     }
 
-    public Room editRoom(String roomId, RoomEditForm form){
-        checkNameExists(roomId, form.getName());
-
-        var roomCategory = roomCategoryReadService.findByEntityId(form.getRoomCategoryEntityId());
-        var orgBranch = orgBranchReadService.findByEntityId(form.getOrgBranchEntityId());
+    public Room updateRoom(String roomId, RoomEditForm editForm){
+        checkNameExists(roomId, editForm.getName());
 
         var room = findByEntityId(roomId);
-        room.setName(form.getName());
-        room.setFloorNumber(form.getFloorNumber());
-        room.setRoomCategory(roomCategory);
-        room.setOrgBranch(orgBranch);
-        room.setPricePerNight(form.getPricePerNight());
+        room.setName(editForm.getName());
+        room.setFloor(editForm.getFloor());
+        room.setRoomCategory(editForm.getRoomCategory());
+        room.setPricePerNight(editForm.getPricePerNight());
 
-        room = save(room ,form.getSessionUserId());
+        room = save(room ,editForm.getSessionUserId());
 
         var activityLogForm = new CreateActivityLogForm();
         activityLogForm.setOwningEntityId(room.getEntityId());
         activityLogForm.setAction("Room update");
-        activityLogForm.setSessionUserId(form.getSessionUserId());
+        activityLogForm.setSessionUserId(editForm.getSessionUserId());
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
 
         return room;
@@ -79,10 +73,5 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
     @Autowired
     public void setOrgBranchReadService(OrgBranchReadService service) {
         this.orgBranchReadService = service;
-    }
-
-    @Autowired
-    public void setRoomCategoryReadService(RoomCategoryReadService service) {
-        this.roomCategoryReadService = service;
     }
 }
