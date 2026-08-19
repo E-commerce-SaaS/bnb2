@@ -1,7 +1,6 @@
 package io.room.form;
 
 import io.lib.form.SessionUserIdForm;
-import io.room.entity.RoomCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,10 +16,13 @@ public class RoomEditForm extends SessionUserIdForm {
     @NotBlank(message = "error.invalid.name")
     private String name;
 
-    private String floor;
+    private String floorNumber;
 
     @NotNull(message = "error.invalid.room.category")
-    private RoomCategory roomCategory;
+    private String roomCategoryId;
+
+    @NotBlank(message = "error.invalid.org.branch")
+    private String orgBranchId;
 
     private BigDecimal pricePerNight;
 
@@ -28,7 +30,7 @@ public class RoomEditForm extends SessionUserIdForm {
         return WordUtils.capitalize(StringUtils.trimToEmpty(name)).trim();
     }
 
-    public String getFloor() {
-        return WordUtils.capitalize(StringUtils.trimToEmpty(floor)).trim();
+    public String getFloorNumber() {
+        return WordUtils.capitalize(StringUtils.trimToEmpty(floorNumber)).trim();
     }
 }

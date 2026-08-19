@@ -5,7 +5,6 @@ import io.lib.view.EntityApiResponse;
 import io.room.form.RoomEditForm;
 import io.lib.view.PagedEntityApiResponse;
 import io.room.entity.ReservationStatus;
-import io.room.entity.RoomCategory;
 import io.room.form.FetchRoomForm;
 import io.room.form.RoomRegistrationForm;
 import io.room.service.RoomEditService;
@@ -70,9 +69,9 @@ public class RoomController {
     @GetMapping("list")
     public PagedEntityApiResponse<RoomView> list(
             @RequestParam(name="query", required = false)String query,
-            @RequestParam(name="status", required = false) ReservationStatus reservationStatus,
-            @RequestParam(name="roomCategory", required = false) RoomCategory roomCategory,
-            @RequestParam(name="branchEntityId", required = false)String branchEntityId,
+            @RequestParam(name="reservationStatus", required = false) ReservationStatus reservationStatus,
+            @RequestParam(name="roomCategoryId", required = false) String roomCategoryId,
+            @RequestParam(name="orgBranchId", required = false) String orgBranchId,
             @RequestParam(name="pageNum", required = false, defaultValue = "0") Integer pageNum,
             @RequestParam(name="pageSize", required = false, defaultValue = "100") Integer pageSize,
             Authentication auth
@@ -81,8 +80,8 @@ public class RoomController {
         var form = new FetchRoomForm();
         form.setQuery(query);
         form.setReservationStatus(reservationStatus);
-        form.setRoomCategory(roomCategory);
-        form.setBranchEntityId(branchEntityId);
+        form.setRoomCategoryId(roomCategoryId);
+        form.setOrgBranchId(orgBranchId);
         form.setPageNum(pageNum);
         form.setPageSize(pageSize);
         form.setSessionUserId(auth.getName());

@@ -16,16 +16,24 @@ public class RoomView extends BaseView<Room> {
         return entity.getName();
     }
 
-    public RoomCategory getRoomCategory(){
-        return entity.getRoomCategory();
+    public String getRoomCategoryName(){
+        return entity.getRoomCategory() == null
+            ? null
+            : entity.getRoomCategory().getName();
+    }
+
+    public String getOrgBranchName(){
+        return entity.getOrgBranch() == null
+            ? null
+            : entity.getOrgBranch().getName();
     }
 
     public BigDecimal getPricePerNight(){
         return entity.getPricePerNight();
     }
 
-    public String getFloor(){
-        return entity.getFloor();
+    public String getFloorNumber(){
+        return entity.getFloorNumber();
     }
 
     public ReservationStatus  getReservationStatus(){
