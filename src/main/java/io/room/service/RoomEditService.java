@@ -18,8 +18,8 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
     private RoomCategoryReadService roomCategoryReadService;
 
     public Room registerRoom(RoomRegistrationForm form){
-        var orgBranch = orgBranchReadService.findByEntityId(form.getOrgBranchId());
-        var roomCategory = roomCategoryReadService.findByEntityId(form.getRoomCategoryId());
+        var orgBranch = orgBranchReadService.findByEntityId(form.getOrgBranchEntityId());
+        var roomCategory = roomCategoryReadService.findByEntityId(form.getRoomCategoryEntityId());
 
         var room = new Room();
         room.setOrgBranch(orgBranch);
@@ -40,11 +40,11 @@ public class RoomEditService extends BaseJpaRepoEditService<Room, RoomRepository
         return room;
     }
 
-    public Room updateRoom(String roomId, RoomEditForm form){
+    public Room editRoom(String roomId, RoomEditForm form){
         checkNameExists(roomId, form.getName());
 
-        var roomCategory = roomCategoryReadService.findByEntityId(form.getRoomCategoryId());
-        var orgBranch = orgBranchReadService.findByEntityId(form.getOrgBranchId());
+        var roomCategory = roomCategoryReadService.findByEntityId(form.getRoomCategoryEntityId());
+        var orgBranch = orgBranchReadService.findByEntityId(form.getOrgBranchEntityId());
 
         var room = findByEntityId(roomId);
         room.setName(form.getName());

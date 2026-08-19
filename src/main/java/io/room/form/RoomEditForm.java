@@ -19,10 +19,10 @@ public class RoomEditForm extends SessionUserIdForm {
     private String floorNumber;
 
     @NotNull(message = "error.invalid.room.category")
-    private String roomCategoryId;
+    private String roomCategoryEntityId;
 
     @NotBlank(message = "error.invalid.org.branch")
-    private String orgBranchId;
+    private String orgBranchEntityId;
 
     private BigDecimal pricePerNight;
 

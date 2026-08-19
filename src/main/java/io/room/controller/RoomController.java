@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,19 +47,19 @@ public class RoomController {
         );
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_ROOM')")
-    @PutMapping("update/{roomId}")
-    public EntityApiResponse<RoomView> updateRoom(
+    @PreAuthorize("hasAuthority('EDIT_ROOM')")
+    @PostMapping("edit/{roomId}")
+    public EntityApiResponse<RoomView> editRoom(
             @PathVariable String roomId,
             @RequestBody @Valid RoomEditForm form,
             Authentication auth,
             Locale locale) {
 
         form.setSessionUserId(auth.getName());
-        var room = roomEditService.updateRoom(roomId, form);
+        var room = roomEditService.editRoom(roomId, form);
 
         return new EntityApiResponse<>(
-                Message.get("room.update.success", locale),
+                Message.get("room.edit.success", locale),
                 new RoomView(room)
         );
     }
@@ -75,7 +74,6 @@ public class RoomController {
             @RequestParam(name="pageNum", required = false, defaultValue = "0") Integer pageNum,
             @RequestParam(name="pageSize", required = false, defaultValue = "100") Integer pageSize,
             Authentication auth
-
     ){
         var form = new FetchRoomForm();
         form.setQuery(query);
