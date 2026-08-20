@@ -2,12 +2,8 @@ package io.item.controller;
 
 import io.lib.form.BaseFetchForm;
 import io.lib.view.ApiResponse;
-import io.item.form.ConsumableItemEditForm;
-import io.item.form.ConsumableItemRegistrationForm;
 import io.item.form.NonConsumableEditForm;
 import io.item.form.NonConsumableItemRegistrationForm;
-import io.item.service.ConsumableItemEditService;
-import io.item.service.ConsumableItemReadService;
 import io.item.service.NonConsumableItemEditService;
 import io.item.service.NonConsumableItemReadService;
 import io.item.view.NonConsumableItemView;
@@ -92,7 +88,7 @@ public class NonConsumableItemController {
     }
 
     @PreAuthorize("hasAuthority('DELETE_NON_CONSUMABLE_ITEM')")
-    @DeleteMapping("delete/{nonConsumableItemId}")
+    @DeleteMapping("delete/{nonconsumableItemId}")
     public ApiResponse delete(
             @PathVariable String nonConsumableItemId,
             Authentication auth,
