@@ -29,7 +29,7 @@ public class JobCardController {
     private JobCardEditService jobCardEditService;
     private JobCardReadService jobCardReadService;
 
-    @PreAuthorize("hasAuthority('VIEW_JOBCARD')")
+    @PreAuthorize("hasAuthority('VIEW_JOB_CARD')")
     @GetMapping("list")
     public PagedEntityApiResponse<JobCardView> list(
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
@@ -44,9 +44,9 @@ public class JobCardController {
         return new PagedEntityApiResponse<>(page, views);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_JOBCARD')")
+    @PreAuthorize("hasAuthority('CREATE_JOB_CARD')")
     @PostMapping("create")
-    public EntityApiResponse<JobCardView> registerTask(
+    public EntityApiResponse<JobCardView> createJobCard(
             @RequestBody @Valid JobCardCreationForm form,
             Authentication auth,
             Locale locale) {
@@ -59,7 +59,7 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_JOBCARD')")
+    @PreAuthorize("hasAuthority('UPDATE_JOB_CARD')")
     @PostMapping("update/{jobCardId}")
     public EntityApiResponse<JobCardView> update(
             @RequestBody @Valid JobCardEditingForm form,
@@ -74,7 +74,7 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('DELETE_JOBCARD')")
+    @PreAuthorize("hasAuthority('DELETE_JOB_CARD')")
     @PostMapping("delete/{jobCardId}")
     public void delete(
             @PathVariable String jobCardId,
@@ -84,7 +84,7 @@ public class JobCardController {
         jobCardEditService.softDeleteJobCard(jobCardId, form);
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TO_INPROGRESS')")
+    @PreAuthorize("hasAuthority('UPDATE_JOB_CARD_TO_INPROGRESS')")
     @PostMapping("update-status-to-in-progress/{jobCardId}")
     public EntityApiResponse<JobCardView> markJobCardAsWorkInProgress(
             @RequestBody @Valid JobCardStatusEditingForm form,
@@ -100,7 +100,7 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TO_DONE')")
+    @PreAuthorize("hasAuthority('UPDATE_JOB_CARD_TO_DONE')")
     @PostMapping("update-status-done/{jobCardId}")
     public EntityApiResponse<JobCardView> markJobCardAsDone(
             @RequestBody @Valid JobCardStatusEditingForm form,
@@ -116,7 +116,7 @@ public class JobCardController {
         );
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TO_INSPECTED')")
+    @PreAuthorize("hasAuthority('UPDATE_JOB_CARD_TO_INSPECTED')")
     @PostMapping("{jobCardId}/update-status-to-inspected")
     public EntityApiResponse<JobCardView> markJobCardAsInspected(
             @RequestBody @Valid JobCardStatusEditingForm form,

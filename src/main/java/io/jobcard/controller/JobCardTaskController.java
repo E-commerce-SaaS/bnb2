@@ -29,7 +29,7 @@ public class JobCardTaskController {
     private JobCardTaskEditService jobCardTaskEditService;
     private JobCardTaskReadService jobCardTaskReadService;
 
-    @PreAuthorize("hasAuthority('VIEW_JOBCARD')")
+    @PreAuthorize("hasAuthority('VIEW_JOB_CARD')")
     @GetMapping("list/{jobCardId}")
     public PagedEntityApiResponse<JobCardTaskView> list(
             @PathVariable String jobCardId,
@@ -50,7 +50,7 @@ public class JobCardTaskController {
         return new PagedEntityApiResponse<>(page, views);
     }
 
-    @PreAuthorize("hasAuthority('CREATE_JOBCARD')")
+    @PreAuthorize("hasAuthority('CREATE_JOB_CARD')")
     @PostMapping("add-tasks/{jobCardId}")
     public EntityApiResponse<List<JobCardTaskView>> addTasks(
             @RequestBody @Valid JobCardTaskCreationForm form,
@@ -81,7 +81,7 @@ public class JobCardTaskController {
         jobCardTaskEditService.softDeleteJobCardTask(jobCardTaskId, form);
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TASK_STATUS')")
+    @PreAuthorize("hasAuthority('UPDATE_JOB_CARD_TASK_STATUS')")
     @PostMapping("update-status/{jobCardTaskId}")
     public EntityApiResponse<JobCardTaskView> updateStatus(
             @RequestBody @Valid JobCardTaskEditingForm form,
