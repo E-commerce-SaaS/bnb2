@@ -44,7 +44,7 @@ public class JobCardController {
         return new PagedEntityApiResponse<>(page, views);
     }
 
-    @isJobCardCreator
+    @PreAuthorize("hasAuthority('CREATE_JOBCARD')")
     @PostMapping("create")
     public EntityApiResponse<JobCardView> registerTask(
             @RequestBody @Valid JobCardCreationForm form,
@@ -59,7 +59,7 @@ public class JobCardController {
         );
     }
 
-    @isJobCardCreator
+    @PreAuthorize("hasAuthority('UPDATE_JOBCARD')")
     @PostMapping("update/{jobCardId}")
     public EntityApiResponse<JobCardView> update(
             @RequestBody @Valid JobCardEditingForm form,
@@ -74,18 +74,18 @@ public class JobCardController {
         );
     }
 
-    @isJobCardCreator
-    @PostMapping("delete/{entityId}")
+    @PreAuthorize("hasAuthority('DELETE_JOBCARD')")
+    @PostMapping("delete/{jobCardId}")
     public void delete(
-            @PathVariable String entityId,
+            @PathVariable String jobCardId,
             Authentication auth) {
         var form = new SessionUserIdForm();
         form.setSessionUserId(auth.getName());
-        jobCardEditService.softDeleteJobCard(entityId, form);
+        jobCardEditService.softDeleteJobCard(jobCardId, form);
     }
 
-    @isJobCardCreator
-    @PostMapping("{jobCardId}/update-status-to-in-progress")
+    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TO_INPROGRESS')")
+    @PostMapping("update-status-to-in-progress/{jobCardId}")
     public EntityApiResponse<JobCardView> markJobCardAsWorkInProgress(
             @RequestBody @Valid JobCardStatusEditingForm form,
             @PathVariable String jobCardId,
@@ -100,8 +100,8 @@ public class JobCardController {
         );
     }
 
-    @isJobCardCreator
-    @PostMapping("{jobCardId}/update-status-done")
+    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TO_DONE')")
+    @PostMapping("update-status-done/{jobCardId}")
     public EntityApiResponse<JobCardView> markJobCardAsDone(
             @RequestBody @Valid JobCardStatusEditingForm form,
             @PathVariable String jobCardId,
@@ -116,7 +116,7 @@ public class JobCardController {
         );
     }
 
-    @isJobCardCreator
+    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TO_INSPECTED')")
     @PostMapping("{jobCardId}/update-status-to-inspected")
     public EntityApiResponse<JobCardView> markJobCardAsInspected(
             @RequestBody @Valid JobCardStatusEditingForm form,

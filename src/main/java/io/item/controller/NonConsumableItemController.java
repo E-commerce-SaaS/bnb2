@@ -88,7 +88,7 @@ public class NonConsumableItemController {
     }
 
     @PreAuthorize("hasAuthority('DELETE_NON_CONSUMABLE_ITEM')")
-    @DeleteMapping("delete/{nonconsumableItemId}")
+    @DeleteMapping("delete/{nonConsumableItemId}")
     public ApiResponse delete(
             @PathVariable String nonConsumableItemId,
             Authentication auth,

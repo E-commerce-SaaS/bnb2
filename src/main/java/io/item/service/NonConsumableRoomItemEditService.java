@@ -40,7 +40,7 @@ public class NonConsumableRoomItemEditService extends BaseJpaRepoEditService<Non
 
         var activityLogForm = new CreateActivityLogForm();
         activityLogForm.setOwningEntityId(roomItem.getEntityId());
-        activityLogForm.setAction("Room NonConsumable item added");
+        activityLogForm.setAction("Room item added");
         activityLogForm.setSessionUserId(form.getSessionUserId());
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
 
