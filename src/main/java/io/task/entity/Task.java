@@ -10,14 +10,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Task extends BaseJpaEntity {
 
     @Column(unique = true, nullable = false, length = 150)
-    private String taskTitle;
+    private String name;
 
-    private String taskDescription;
-
+    @Column(length = 500)
+    private String description;
 }

@@ -20,7 +20,7 @@ public class TaskReadService extends BaseJpaRepoReadService<Task, TaskRepository
         var spec = repository.notDeleted();
 
         if(StringUtils.isNotBlank(form.getQuery())){
-            spec = spec.and(repository.taskTitleLike(form.getQuery()));
+            spec = spec.and(repository.nameLike(form.getQuery()));
         }
         return spec;
     }

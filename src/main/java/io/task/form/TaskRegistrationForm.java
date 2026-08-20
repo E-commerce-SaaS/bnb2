@@ -1,11 +1,11 @@
 package io.task.form;
 
-import io.task.validator.UniqueTaskTitle;
+import io.task.validator.UniqueTaskName;
 
 public class TaskRegistrationForm extends TaskEditForm{
 
-    @UniqueTaskTitle
-    public String getTaskTitle(){
-        return super.getTaskTitle();
+    @UniqueTaskName
+    public String getName(){
+        return super.getName();
     }
 }
