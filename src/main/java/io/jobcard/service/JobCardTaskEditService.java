@@ -23,7 +23,7 @@ public class JobCardTaskEditService extends BaseJpaRepoEditService<JobCardTask, 
     private JobCardTaskReadService jobCardTaskReadService;
     private TaskReadService taskReadService;
 
-    public List<JobCardTask> createJobCardTask(String jobCardTaskId, JobCardTaskCreationForm form){
+    public List<JobCardTask> addTasks(String jobCardTaskId, JobCardTaskCreationForm form){
 
         var jobCard = jobCardReadService.findByEntityId(jobCardTaskId);
 

@@ -29,7 +29,7 @@ public class JobCardController {
     private JobCardEditService jobCardEditService;
     private JobCardReadService jobCardReadService;
 
-    @PreAuthorize("hasAuthority('VIEW_JOBCARDS')")
+    @PreAuthorize("hasAuthority('VIEW_JOBCARD')")
     @GetMapping("list")
     public PagedEntityApiResponse<JobCardView> list(
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,

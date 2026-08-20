@@ -29,7 +29,7 @@ public class JobCardTaskController {
     private JobCardTaskEditService jobCardTaskEditService;
     private JobCardTaskReadService jobCardTaskReadService;
 
-    @PreAuthorize("hasAuthority('VIEW_JOBCARDTASKS')")
+    @PreAuthorize("hasAuthority('VIEW_JOBCARD')")
     @GetMapping("list/{jobCardId}")
     public PagedEntityApiResponse<JobCardTaskView> list(
             @PathVariable String jobCardId,
@@ -50,16 +50,16 @@ public class JobCardTaskController {
         return new PagedEntityApiResponse<>(page, views);
     }
 
-    @isJobCardCreator
-    @PostMapping("create/{jobCardId}")
-    public EntityApiResponse<List<JobCardTaskView>> registerTask(
+    @PreAuthorize("hasAuthority('CREATE_JOBCARD')")
+    @PostMapping("add-tasks/{jobCardId}")
+    public EntityApiResponse<List<JobCardTaskView>> addTasks(
             @RequestBody @Valid JobCardTaskCreationForm form,
             @PathVariable String jobCardId,
             Authentication auth,
             Locale locale) {
 
         form.setSessionUserId(auth.getName());
-        var jobCardTasks = jobCardTaskEditService.createJobCardTask(jobCardId, form);
+        var jobCardTasks = jobCardTaskEditService.addTasks(jobCardId, form);
 
         List<JobCardTaskView> taskViews = jobCardTasks.stream()
                 .map(JobCardTaskView::new)
@@ -71,7 +71,7 @@ public class JobCardTaskController {
         );
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_JOBCARDTASKSTATUS')")
+    @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TASK_STATUS')")
     @PostMapping("update-status/{jobCardTaskId}")
     public EntityApiResponse<JobCardTaskView> update(
             @RequestBody @Valid JobCardTaskEditingForm form,
@@ -81,19 +81,18 @@ public class JobCardTaskController {
         form.setSessionUserId(auth.getName());
         var jobCardTask = jobCardTaskEditService.updateJobCardTaskStatus(jobCardTaskId, form);
         return new EntityApiResponse<>(
-                Message.get("jobcardtask.edit.success", locale),
-                new JobCardTaskView(jobCardTask)
+            Message.get("jobcardtask.edit.success", locale),
+            new JobCardTaskView(jobCardTask)
         );
     }
 
-    @isJobCardCreator
-    @PostMapping("delete/{entityId}")
+    @PostMapping("delete/{jobCardTaskId}")
     public void delete(
-            @PathVariable String entityId,
+            @PathVariable String jobCardTaskId,
             Authentication auth) {
         var form = new SessionUserIdForm();
         form.setSessionUserId(auth.getName());
-        jobCardTaskEditService.softDeleteJobCardTask(entityId, form);
+        jobCardTaskEditService.softDeleteJobCardTask(jobCardTaskId, form);
     }
 
     @Autowired
@@ -106,5 +105,4 @@ public class JobCardTaskController {
     public void setJobCardTaskReadService(JobCardTaskReadService service) {
         this.jobCardTaskReadService = service;
     }
-
 }
