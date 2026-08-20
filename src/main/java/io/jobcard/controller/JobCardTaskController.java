@@ -73,7 +73,7 @@ public class JobCardTaskController {
 
     @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TASK_STATUS')")
     @PostMapping("update-status/{jobCardTaskId}")
-    public EntityApiResponse<JobCardTaskView> update(
+    public EntityApiResponse<JobCardTaskView> updateStatus(
             @RequestBody @Valid JobCardTaskEditingForm form,
             @PathVariable String jobCardTaskId,
             Authentication auth,
