@@ -71,6 +71,16 @@ public class JobCardTaskController {
         );
     }
 
+    @PreAuthorize("hasAuthority('DELETE_JOBCARD_TASK')")
+    @PostMapping("delete/{jobCardTaskId}")
+    public void deleteTask(
+            @PathVariable String jobCardTaskId,
+            Authentication auth) {
+        var form = new SessionUserIdForm();
+        form.setSessionUserId(auth.getName());
+        jobCardTaskEditService.softDeleteJobCardTask(jobCardTaskId, form);
+    }
+
     @PreAuthorize("hasAuthority('UPDATE_JOBCARD_TASK_STATUS')")
     @PostMapping("update-status/{jobCardTaskId}")
     public EntityApiResponse<JobCardTaskView> updateStatus(
@@ -84,15 +94,6 @@ public class JobCardTaskController {
             Message.get("jobcardtask.edit.success", locale),
             new JobCardTaskView(jobCardTask)
         );
-    }
-
-    @PostMapping("delete/{jobCardTaskId}")
-    public void delete(
-            @PathVariable String jobCardTaskId,
-            Authentication auth) {
-        var form = new SessionUserIdForm();
-        form.setSessionUserId(auth.getName());
-        jobCardTaskEditService.softDeleteJobCardTask(jobCardTaskId, form);
     }
 
     @Autowired
