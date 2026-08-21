@@ -16,7 +16,6 @@ public class CustomerEditForm extends SessionUserIdForm {
     private String name;
 
     @NotBlank(message = "error.invalid.phoneNumber")
-    @UniquePhoneNumber
     private String phoneNumber;
 
     public String getName() {

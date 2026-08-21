@@ -2,10 +2,7 @@ package io.customer.controller;
 
 import io.customer.form.CustomerRegistrationForm;
 import io.customer.service.CustomerEditService;
-import io.customer.service.CustomerReadService;
 import io.customer.view.CustomerView;
-import io.item.service.ConsumableItemEditService;
-import io.item.service.ConsumableItemReadService;
 import io.lib.service.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,10 +20,10 @@ import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 
 
 @RestController
-@RequestMapping(INTERNAL_USER_BASE_URL + "/customer")
+@RequestMapping(INTERNAL_USER_BASE_URL + "/customers")
 public class CustomerController {
     private CustomerEditService customerEditService;
-    private CustomerReadService customerReadService;
+
 
     @PreAuthorize("hasAuthority('REGISTER_CUSTOMER')")
     @PostMapping("/register")
@@ -49,8 +46,5 @@ public class CustomerController {
         this.customerEditService = service;
     }
 
-    @Autowired
-    public void setCustomerReadService(CustomerReadService service) {
-        this.customerReadService = service;
-    }
+
 }

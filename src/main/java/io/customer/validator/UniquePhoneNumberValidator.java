@@ -1,11 +1,16 @@
 package io.customer.validator;
 
+import io.customer.repository.CustomerRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class UniquePhoneNumberValidator implements ConstraintValidator<UniquePhoneNumber, String> {
 
-    private static final String PHONE_NUMBER_PATTERN = "^\\+?[0-9]{10,15}$";
+    private final CustomerRepository customerRepository;
 
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
@@ -13,6 +18,8 @@ public class UniquePhoneNumberValidator implements ConstraintValidator<UniquePho
             return true;
         }
 
-        return phoneNumber.matches(PHONE_NUMBER_PATTERN);
+        return customerRepository
+                .findOne(customerRepository.phoneNumberIs(phoneNumber))
+                .isEmpty();
     }
 }
