@@ -6,12 +6,12 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = UniquePhoneNumberValidator.class)
+@Constraint(validatedBy = UniqueCustomerPhoneNumberValidator.class)
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniquePhoneNumber {
+public @interface UniqueCustomerPhoneNumber {
 
-    String message() default "Phone number is already registered";
+    String message() default "error.user.phone.number.exits";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

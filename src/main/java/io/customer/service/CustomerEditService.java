@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerEditService extends BaseJpaRepoEditService<Customer, CustomerRepository> {
 
-
     public Customer registerCustomer(CustomerRegistrationForm form) {
         var customer = new Customer();
 
@@ -26,7 +25,6 @@ public class CustomerEditService extends BaseJpaRepoEditService<Customer, Custom
         activityLogForm.setAction("Customer registration");
         activityLogForm.setSessionUserId(form.getSessionUserId());
         activityLogQueuingService.enqueueActivityLog(activityLogForm);
-
 
         return customer;
     }

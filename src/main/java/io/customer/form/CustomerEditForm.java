@@ -1,6 +1,5 @@
 package io.customer.form;
 
-import io.customer.validator.UniquePhoneNumber;
 import io.lib.form.SessionUserIdForm;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

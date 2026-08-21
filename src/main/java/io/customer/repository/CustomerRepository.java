@@ -9,10 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends BaseJpaRepository<Customer> {
 
     default Specification<Customer> nameLike(String name){
-        return (root, cb, cq) -> cq.like(
-                cq.lower(root.get("name")),
-                "%" + name.toLowerCase() + "%"
-        );
+        return (root, cb, cq) ->
+                cq.like(root.get("name"), "%" + name + "%");
     }
 
     default Specification<Customer> phoneNumberIs(String phoneNumber){

@@ -1,16 +1,15 @@
 package io.customer.validator;
 
+import io.customer.entity.Customer;
 import io.customer.repository.CustomerRepository;
+import io.lib.service.BaseJpaRepoReadService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-public class UniquePhoneNumberValidator implements ConstraintValidator<UniquePhoneNumber, String> {
-
-    private final CustomerRepository customerRepository;
+public class UniqueCustomerPhoneNumberValidator extends BaseJpaRepoReadService<Customer, CustomerRepository>
+        implements ConstraintValidator<UniqueCustomerPhoneNumber, String> {
 
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
@@ -18,8 +17,9 @@ public class UniquePhoneNumberValidator implements ConstraintValidator<UniquePho
             return true;
         }
 
-        return customerRepository
-                .findOne(customerRepository.phoneNumberIs(phoneNumber))
-                .isEmpty();
+        var spec = repository.notDeleted()
+                .and(repository.phoneNumberIs(phoneNumber));
+
+        return !repository.exists(spec);
     }
 }

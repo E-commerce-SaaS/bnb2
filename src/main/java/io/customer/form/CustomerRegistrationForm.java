@@ -1,6 +1,6 @@
 package io.customer.form;
 
-import io.customer.validator.UniquePhoneNumber;
+import io.customer.validator.UniqueCustomerPhoneNumber;
 
 public class CustomerRegistrationForm extends CustomerEditForm{
 
@@ -9,7 +9,7 @@ public class CustomerRegistrationForm extends CustomerEditForm{
     }
 
     @Override
-    @UniquePhoneNumber
+    @UniqueCustomerPhoneNumber
     public String getPhoneNumber() {
         return super.getPhoneNumber();
     }

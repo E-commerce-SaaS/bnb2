@@ -18,12 +18,10 @@ import java.util.Locale;
 
 import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 
-
 @RestController
 @RequestMapping(INTERNAL_USER_BASE_URL + "/customers")
 public class CustomerController {
     private CustomerEditService customerEditService;
-
 
     @PreAuthorize("hasAuthority('REGISTER_CUSTOMER')")
     @PostMapping("/register")
@@ -39,7 +37,6 @@ public class CustomerController {
                 new CustomerView(customer)
         );
     }
-
 
     @Autowired
     public void setCustomerEditServiceEditService(CustomerEditService service) {
