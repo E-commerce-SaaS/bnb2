@@ -49,15 +49,4 @@ public class CustomerEditService extends BaseJpaRepoEditService<Customer, Custom
         return customer;
     }
 
-    private void checkNameExists(String customerId, String name){
-        var spec = repository.notDeleted()
-                .and(repository.nameLike(name))
-                .and(repository.entityIdNot(customerId));
-
-        boolean exists = repository.exists(spec);
-
-        if(exists){
-            throw new CommonRuntimeException(ExceptionType.BAD_REQUEST, "error.duplicate.name");
-        }
-    }
 }
