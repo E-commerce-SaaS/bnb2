@@ -21,22 +21,26 @@ public class RoomReadService extends BaseJpaRepoReadService<
 
         var spec = repository.notDeleted();
 
-        if(form.getRoomCategory() != null) {
-            spec = spec.and(repository.roomCategoryIs(form.getRoomCategory()));
+        if(StringUtils.isNotBlank(form.getQuery())){
+            spec = spec.and(repository.nameLike(form.getQuery()));
+        }
+
+        if(form.getRoomCategoryId() != null) {
+            spec = spec.and(repository.roomCategoryIdIs(form.getRoomCategoryId()));
         }
 
         if(form.getReservationStatus() != null) {
             spec = spec.and(repository.reservationStatusIs(form.getReservationStatus()));
         }
 
-        if (StringUtils.isNotBlank(form.getBranchEntityId())) {
-            spec = spec.and(repository.branchEntityIdIs(form.getBranchEntityId()));
+        if (StringUtils.isNotBlank(form.getOrgBranchId())) {
+            spec = spec.and(repository.orgBranchIdIs(form.getOrgBranchId()));
         }
 
         if(StringUtils.isNotBlank(form.getSessionUserId())){
             var user = internalUserReadService.findByEntityId(form.getSessionUserId());
             if(user.getOrgBranch() != null){
-                spec = spec.and(repository.branchEntityIdIs(user.getOrgBranch().getEntityId()));
+                spec = spec.and(repository.orgBranchIdIs(user.getOrgBranch().getEntityId()));
             }
         }
 

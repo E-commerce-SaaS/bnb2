@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class TaskEditForm extends SessionUserIdForm {
     @NotBlank(message = "error.invalid.task.title")
-    private String taskTitle;
+    private String name;
 
-    private String taskDescription;
+    private String description;
 }

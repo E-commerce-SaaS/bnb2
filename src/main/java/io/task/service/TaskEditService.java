@@ -16,8 +16,8 @@ public class TaskEditService extends BaseJpaRepoEditService<Task, TaskRepository
     public Task registerTask(TaskEditForm form){
 
         var task = new Task();
-        task.setTaskTitle(form.getTaskTitle());
-        task.setTaskDescription(form.getTaskDescription());
+        task.setName(form.getName());
+        task.setDescription(form.getDescription());
         task.setCreatedByEntityId(form.getSessionUserId());
 
         task = save(task, form.getSessionUserId());
@@ -33,13 +33,13 @@ public class TaskEditService extends BaseJpaRepoEditService<Task, TaskRepository
 
     public Task updateTask(String taskId, TaskEditForm editForm){
 
-        if(taskExists(taskId, editForm.getTaskTitle())){
+        if(taskExists(taskId, editForm.getName())){
             throw new CommonRuntimeException(ExceptionType.BAD_REQUEST, "error.duplicate.task");
         }
 
         var task = findByEntityId(taskId);
-        task.setTaskTitle(editForm.getTaskTitle());
-        task.setTaskDescription(editForm.getTaskDescription());
+        task.setName(editForm.getName());
+        task.setDescription(editForm.getDescription());
 
         save(task ,editForm.getSessionUserId());
 
@@ -59,7 +59,7 @@ public class TaskEditService extends BaseJpaRepoEditService<Task, TaskRepository
 
     private boolean taskExists(String taskId, String taskTitle){
         var spec = repository.notDeleted()
-            .and(repository.taskTitleIs(taskTitle)
+            .and(repository.nameIs(taskTitle)
             .and(repository.entityIdNot(taskId)));
 
         return repository.exists(spec);

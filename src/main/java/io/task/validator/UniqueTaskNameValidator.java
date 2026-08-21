@@ -10,13 +10,13 @@ import org.apache.commons.lang.WordUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-class UniqueTaskTitleValidator extends BaseJpaRepoReadService<Task, TaskRepository> implements ConstraintValidator<UniqueTaskTitle, String> {
+class UniqueTaskNameValidator extends BaseJpaRepoReadService<Task, TaskRepository> implements ConstraintValidator<UniqueTaskName, String> {
     @Override
     public boolean isValid(String taskTitle, ConstraintValidatorContext constraintValidatorContext) {
         String sanitizedTaskTitle = WordUtils.capitalize(StringUtils.trimToEmpty(taskTitle));
 
         var spec = repository.notDeleted()
-                .and(repository.taskTitleIs(sanitizedTaskTitle));
+                .and(repository.nameIs(sanitizedTaskTitle));
 
         return !repository.exists(spec);
     }

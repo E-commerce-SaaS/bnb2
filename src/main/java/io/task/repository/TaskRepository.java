@@ -8,15 +8,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TaskRepository extends BaseJpaRepository<Task> {
 
-    default Specification<Task> taskTitleIs(String title){
-        return (root, cb, cq) -> cq.equal(root.get("taskTitle"), title);
+    default Specification<Task> nameIs(String title){
+        return (root, cb, cq) -> cq.equal(root.get("name"), title);
     }
 
-    default Specification<Task> taskTitleLike(String keyword){
+    default Specification<Task> nameLike(String keyword){
         return (root, cq, cb) -> cb.like(root.get("name"), "%" + keyword +"%");
     }
-
-     
 }
 
 

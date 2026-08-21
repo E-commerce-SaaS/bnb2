@@ -1,21 +1,18 @@
-package io.task.entity;
+package io.item.entity;
 
 import io.lib.entity.BaseJpaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class Task extends BaseJpaEntity {
+public class NonConsumableItem extends BaseJpaEntity {
 
-    @Column(unique = true, nullable = false, length = 150)
+    @Column(unique = true, length = 100)
     private String name;
 
-    @Column(length = 500)
     private String description;
 }

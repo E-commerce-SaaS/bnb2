@@ -49,7 +49,7 @@ public class TemplateController {
         );
     }
 
-    @PreAuthorize("hasAuthority('VIEW_TEMPLATE')")
+    @PreAuthorize("hasAuthority('VIEW_TASK_TEMPLATE')")
     @GetMapping("fetch/{templateId}")
     public EntityApiResponse<TemplateView>  fetchTemplate(
         @PathVariable String templateId
@@ -61,7 +61,7 @@ public class TemplateController {
 
     }
 
-    @PreAuthorize("hasAuthority('VIEW_TEMPLATE')")
+    @PreAuthorize("hasAuthority('VIEW_TASK_TEMPLATE')")
     @GetMapping("list")
     public PagedEntityApiResponse<TemplateView> list(
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
@@ -76,7 +76,7 @@ public class TemplateController {
         return new PagedEntityApiResponse<>(page, views);
     }
 
-    @PreAuthorize("hasAuthority('EDIT_TEMPLATE')")
+    @PreAuthorize("hasAuthority('EDIT_TASK_TEMPLATE')")
     @PostMapping("edit/{templateId}")
     public EntityApiResponse<TemplateView> editTemplate(
         @PathVariable
@@ -93,7 +93,7 @@ public class TemplateController {
         );
     }
 
-    @PreAuthorize("hasAuthority('DELETE_TEMPLATE')")
+    @PreAuthorize("hasAuthority('DELETE_TASK_TEMPLATE')")
     @PostMapping("delete/{templateId}")
     public ApiResponse delete(
             @PathVariable String templateId,
