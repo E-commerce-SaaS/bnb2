@@ -5,8 +5,6 @@ import io.customer.entity.Customer;
 import io.customer.form.CustomerEditForm;
 import io.customer.form.CustomerRegistrationForm;
 import io.customer.repository.CustomerRepository;
-import io.lib.exception.CommonRuntimeException;
-import io.lib.exception.ExceptionType;
 import io.lib.service.BaseJpaRepoEditService;
 
 import org.springframework.stereotype.Service;

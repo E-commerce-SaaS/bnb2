@@ -1,6 +1,5 @@
 package io.customer.view;
 
-
 import io.customer.entity.Customer;
 import io.lib.view.BaseView;
 
