@@ -2,8 +2,11 @@ package io.customer.service;
 
 import io.activitylog.form.CreateActivityLogForm;
 import io.customer.entity.Customer;
+import io.customer.form.CustomerEditForm;
 import io.customer.form.CustomerRegistrationForm;
 import io.customer.repository.CustomerRepository;
+import io.lib.exception.CommonRuntimeException;
+import io.lib.exception.ExceptionType;
 import io.lib.service.BaseJpaRepoEditService;
 
 import org.springframework.stereotype.Service;
@@ -28,4 +31,22 @@ public class CustomerEditService extends BaseJpaRepoEditService<Customer, Custom
 
         return customer;
     }
+
+    public Customer editCustomer(String customerId, CustomerEditForm form) {
+        var customer = findByEntityId(customerId);
+
+        customer.setName(form.getName());
+        customer.setPhoneNumber(form.getPhoneNumber());
+
+        customer = save(customer ,form.getSessionUserId());
+
+        var activityLogForm = new CreateActivityLogForm();
+        activityLogForm.setOwningEntityId(customer.getEntityId());
+        activityLogForm.setAction("Customer update");
+        activityLogForm.setSessionUserId(form.getSessionUserId());
+        activityLogQueuingService.enqueueActivityLog(activityLogForm);
+
+        return customer;
+    }
+
 }

@@ -1,5 +1,6 @@
 package io.customer.controller;
 
+import io.customer.form.CustomerEditForm;
 import io.customer.form.CustomerRegistrationForm;
 import io.customer.service.CustomerEditService;
 import io.customer.view.CustomerView;
@@ -34,6 +35,25 @@ public class CustomerController {
 
         return new EntityApiResponse<>(
                 Message.get("Customer.registration.success", locale),
+                new CustomerView(customer)
+        );
+    }
+
+    @PreAuthorize("hasAuthority('EDIT_CUSTOMER')")
+    @PutMapping("edit/{customerId}")
+    public EntityApiResponse<CustomerView> edit(
+            @PathVariable String customerId,
+            @RequestBody @Valid CustomerEditForm form,
+            Authentication auth,
+            Locale locale){
+        form.setSessionUserId(auth.getName());
+
+        var customer = customerEditService.editCustomer(
+                customerId,
+                form
+        );
+        return new EntityApiResponse<>(
+                Message.get("customer.edit.success", locale),
                 new CustomerView(customer)
         );
     }
