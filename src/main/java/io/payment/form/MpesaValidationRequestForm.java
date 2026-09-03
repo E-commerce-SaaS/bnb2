@@ -1,12 +1,14 @@
 package io.payment.form;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Setter
 @Getter
-public class SafaricomStatusQueryRequest {
+public class MpesaValidationRequestForm {
     @JsonProperty("TransactionType")
     private String transactionType;
 

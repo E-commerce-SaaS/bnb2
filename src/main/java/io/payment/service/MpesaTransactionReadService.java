@@ -5,10 +5,13 @@ import io.payment.entity.MpesaTransaction;
 import io.payment.form.SafaricomStatusQueryRequest;
 import io.payment.repository.MpesaTransactionRepository;
 
-import java.net.http.HttpHeaders;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;

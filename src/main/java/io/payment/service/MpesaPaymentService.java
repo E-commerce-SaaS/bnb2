@@ -1,17 +1,18 @@
 package io.payment.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import io.payment.entity.MpesaTransaction;
 import io.payment.entity.MpesaTransactionStatus;
-import io.payment.repository.MpesaTransactionRepository;
-import io.payment.veiw.C2BpaymentResponceVeiw;
 import io.payment.form.MpesaValidationRequestForm;
+import io.payment.view.C2BpaymentResponceVeiw;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import io.payment.repository.MpesaTransactionRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MpesaPaymentService {
     protected MpesaTransactionRepository repository;
+
 
     public C2BpaymentResponceVeiw confirmation (MpesaValidationRequestForm request){
         if (request.getBillRefNumber() == null || request.getBillRefNumber().isBlank()) {

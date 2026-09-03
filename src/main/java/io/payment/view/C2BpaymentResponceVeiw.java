@@ -1,4 +1,4 @@
-package io.payment.veiw;
+package io.payment.view;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

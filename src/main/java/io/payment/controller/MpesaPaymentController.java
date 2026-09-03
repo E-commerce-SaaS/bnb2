@@ -1,28 +1,30 @@
 package io.payment.controller;
 
+import io.payment.form.MpesaValidationRequestForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.payment.entity.MpesaTransaction;
 import io.payment.form.SafaricomStatusQueryRequest;
-import io.payment.repository.MpesaTransactionRepository;
 import io.payment.service.MpesaPaymentService;
 import io.payment.service.MpesaTransactionReadService;
-import io.payment.veiw.C2BpaymentResponceVeiw;
+import io.payment.view.C2BpaymentResponceVeiw;
 
 import java.util.List;
 import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 
 @RestController
-@RequestMapping(INTERNAL_USER_BASE_URL + "/payment") 
+@RequestMapping(INTERNAL_USER_BASE_URL + "/payments")
 public class MpesaPaymentController {
 
     private MpesaPaymentService paymentService;
     private MpesaTransactionReadService transactionReadService;
 
     @PostMapping("/confirm")
-    public ResponseEntity<C2BpaymentResponceVeiw> confirmTransaction(@RequestBody SafaricomStatusQueryRequest request) {
+    public ResponseEntity<C2BpaymentResponceVeiw> confirmTransaction(
+            @RequestBody MpesaValidationRequestForm request) {          // ← changed type
+
         C2BpaymentResponceVeiw response = paymentService.confirmation(request);
         return ResponseEntity.ok(response);
     }
