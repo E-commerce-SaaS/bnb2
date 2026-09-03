@@ -12,6 +12,8 @@ import io.payment.service.MpesaTransactionReadService;
 import io.payment.view.C2BpaymentResponceVeiw;
 
 import java.util.List;
+import java.util.Map;
+
 import static io.lib.service.SystemConfig.INTERNAL_USER_BASE_URL;
 
 @RestController
@@ -43,6 +45,18 @@ public class MpesaPaymentController {
         
         String safaricomResponse = transactionReadService.pullLiveLedgerFromSafaricom(queryRequest, bearerToken);
         return ResponseEntity.ok(safaricomResponse);
+    }
+
+    @GetMapping("/status/{transId}")
+    public ResponseEntity<?> getTransactionStatus(@PathVariable String transId) {
+        try {
+            MpesaTransaction transaction = transactionReadService.getTransactionStatus(transId);
+            return ResponseEntity.ok(transaction);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of(
+                    "message", e.getMessage()
+            ));
+        }
     }
 
     @Autowired

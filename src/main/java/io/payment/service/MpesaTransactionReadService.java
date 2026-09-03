@@ -42,6 +42,13 @@ public class MpesaTransactionReadService {
             return "Failed to communicate with Safaricom gateway: " + e.getMessage();
         }
     }
+
+    @Transactional(readOnly = true)
+    public MpesaTransaction getTransactionStatus(String transId) {
+        return mpesaTransactionRepository.findByTransId(transId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found with TransID: " + transId));
+    }
+
     @Autowired
     public void setMpesaTransactionRepository(MpesaTransactionRepository mpesaTransactionRepository){
         this.mpesaTransactionRepository = mpesaTransactionRepository;

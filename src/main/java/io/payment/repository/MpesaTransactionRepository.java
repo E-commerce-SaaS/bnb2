@@ -9,4 +9,7 @@ import java.util.Optional;
 public interface MpesaTransactionRepository extends JpaRepository<MpesaTransaction, Long> {
     
     Optional<MpesaTransaction> findByTransId(String transId);
+
+    // Optional: also useful
+    Optional<MpesaTransaction> findByBillRefNumber(String billRefNumber);
 }
