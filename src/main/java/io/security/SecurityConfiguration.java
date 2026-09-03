@@ -41,7 +41,10 @@ public class SecurityConfiguration  {
         SystemConfig.INTERNAL_USER_BASE_URL + "/auth/reset-password/**",
         SystemConfig.INTERNAL_USER_BASE_URL + "/auth/init-login/**",
         SystemConfig.INTERNAL_USER_BASE_URL + "/auth/complete-login/**",
-        SystemConfig.INTERNAL_USER_BASE_URL + "/auth/update-public-key/**"
+        SystemConfig.INTERNAL_USER_BASE_URL + "/auth/update-public-key/**",
+        SystemConfig.INTERNAL_USER_BASE_URL + "/payment/confirm",
+        SystemConfig.INTERNAL_USER_BASE_URL + "/payment/pull"
+            
     };
 
     @Bean
